@@ -38,24 +38,6 @@ It uses **IoT-inspired data**, **machine learning models**, and **interactive vi
 5. **Prediction** – Forecast next 10 days of electricity consumption.  
 6. **Visualization** – Plot actual vs. predicted usage using Matplotlib/Plotly.  
 
-🧾 Example Code (Forecasting Section):
-
- python
-# Aggregate usage by day
-daily_df = df.groupby('Date')['Usage_kWh'].sum().reset_index()
-daily_df['Day_Index'] = np.arange(len(daily_df))
-
-# Train Linear Regression model
-model = LinearRegression()
-model.fit(daily_df[['Day_Index']], daily_df['Usage_kWh'])
-
-# Forecast next 10 days
-future_index = np.arange(len(daily_df), len(daily_df) + 10).reshape(-1, 1)
-future_usage = model.predict(future_index)
-future_dates = pd.date_range(start=daily_df['Date'].max() + pd.Timedelta(days=1), periods=10)
-
-# Combine forecast data
-future_df = pd.DataFrame({'Date': future_dates, 'Predicted_Usage_kWh': future_usage})
 
 🧠 Insights & Benefits:
 
