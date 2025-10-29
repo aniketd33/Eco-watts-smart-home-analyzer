@@ -1,0 +1,201 @@
+Timestamp,Appliance,Usage_kWh,Room,Mode,Temp(C),Cost(INR)
+2025-11-01 08:00:00,Microwave Oven,1.62,Bathroom,Normal,28.3,15.2
+2025-11-01 09:00:00,Refrigerator,1.97,Study Room,Heat,28.2,17.67
+2025-11-01 10:00:00,Refrigerator,2.44,Bedroom,Cool,21.0,20.47
+2025-11-01 11:00:00,Washing Machine,0.42,Utility Room,Heat,25.1,2.94
+2025-11-01 12:00:00,Refrigerator,2.43,Bedroom,Cool,23.5,18.04
+2025-11-01 13:00:00,Light Bulb,2.37,Bedroom,Eco,25.0,22.5
+2025-11-01 14:00:00,Light Bulb,0.74,Dining Room,Cool,24.6,6.9
+2025-11-01 15:00:00,Washing Machine,1.77,Kitchen,Normal,25.4,14.89
+2025-11-01 16:00:00,Refrigerator,2.1,Kitchen,Cool,19.0,15.07
+2025-11-01 17:00:00,Air Conditioner,2.2,Bathroom,Heat,20.8,16.68
+2025-11-01 18:00:00,Laptop Charger,0.34,Dining Room,Eco,21.9,3.14
+2025-11-01 19:00:00,Water Heater,1.95,Bathroom,Cool,23.6,18.23
+2025-11-01 20:00:00,Light Bulb,0.97,Study Room,Normal,22.1,6.89
+2025-11-01 21:00:00,Microwave Oven,2.44,Bathroom,Auto,20.0,18.49
+2025-11-01 22:00:00,Microwave Oven,0.86,Balcony,Heat,24.4,6.03
+2025-11-01 23:00:00,Laptop Charger,1.78,Bathroom,Heat,25.4,14.07
+2025-11-02 00:00:00,Room Heater,1.38,Balcony,Heat,21.1,13.02
+2025-11-02 01:00:00,Refrigerator,2.38,Garage,Normal,19.2,21.15
+2025-11-02 02:00:00,Microwave Oven,1.33,Dining Room,Heat,18.8,11.11
+2025-11-02 03:00:00,Laptop Charger,2.14,Dining Room,Heat,26.9,17.9
+2025-11-02 04:00:00,Refrigerator,1.62,Study Room,Normal,25.0,15.29
+2025-11-02 05:00:00,Room Heater,1.48,Dining Room,Heat,22.7,12.13
+2025-11-02 06:00:00,Laptop Charger,0.35,Kitchen,Eco,29.3,2.97
+2025-11-02 07:00:00,Microwave Oven,1.82,Study Room,Cool,29.6,13.14
+2025-11-02 08:00:00,Television,0.51,Utility Room,Eco,26.5,4.53
+2025-11-02 09:00:00,Refrigerator,0.51,Utility Room,Normal,27.1,4.05
+2025-11-02 10:00:00,Television,1.11,Bedroom,Heat,27.8,10.0
+2025-11-02 11:00:00,Ceiling Fan,1.3,Guest Room,Normal,25.6,9.57
+2025-11-02 12:00:00,Refrigerator,2.35,Balcony,Normal,29.1,19.63
+2025-11-02 13:00:00,Laptop Charger,0.28,Dining Room,Heat,27.4,2.46
+2025-11-02 14:00:00,Water Heater,1.91,Dining Room,Heat,22.6,17.44
+2025-11-02 15:00:00,Ceiling Fan,0.86,Living Room,Auto,20.2,7.26
+2025-11-02 16:00:00,Room Heater,0.39,Bedroom,Auto,22.3,2.97
+2025-11-02 17:00:00,Air Conditioner,1.43,Kitchen,Cool,20.7,11.04
+2025-11-02 18:00:00,Room Heater,0.38,Study Room,Heat,23.6,3.28
+2025-11-02 19:00:00,Washing Machine,2.29,Study Room,Eco,28.7,17.85
+2025-11-02 20:00:00,Light Bulb,1.73,Utility Room,Cool,18.1,12.85
+2025-11-02 21:00:00,Microwave Oven,1.64,Dining Room,Cool,26.8,12.35
+2025-11-02 22:00:00,Water Heater,2.18,Study Room,Auto,28.2,19.04
+2025-11-02 23:00:00,Light Bulb,2.17,Kitchen,Heat,26.3,17.86
+2025-11-03 00:00:00,Television,2.07,Dining Room,Auto,21.4,17.91
+2025-11-03 01:00:00,Light Bulb,0.75,Guest Room,Auto,24.3,6.49
+2025-11-03 02:00:00,Water Heater,0.64,Bedroom,Eco,25.2,4.54
+2025-11-03 03:00:00,Air Conditioner,1.35,Balcony,Cool,26.7,11.4
+2025-11-03 04:00:00,Room Heater,1.39,Kitchen,Eco,23.0,12.63
+2025-11-03 05:00:00,Washing Machine,0.63,Balcony,Auto,18.7,4.69
+2025-11-03 06:00:00,Microwave Oven,2.35,Guest Room,Eco,24.6,18.74
+2025-11-03 07:00:00,Washing Machine,0.98,Guest Room,Auto,29.5,8.73
+2025-11-03 08:00:00,Microwave Oven,0.3,Kitchen,Normal,28.8,2.34
+2025-11-03 09:00:00,Air Conditioner,0.97,Bedroom,Heat,18.6,8.7
+2025-11-03 10:00:00,Television,1.29,Living Room,Heat,18.9,10.2
+2025-11-03 11:00:00,Laptop Charger,0.63,Bathroom,Normal,26.9,4.51
+2025-11-03 12:00:00,Room Heater,1.54,Bathroom,Heat,26.4,14.16
+2025-11-03 13:00:00,Refrigerator,2.48,Utility Room,Cool,23.3,21.13
+2025-11-03 14:00:00,Washing Machine,1.43,Kitchen,Normal,22.7,11.39
+2025-11-03 15:00:00,Washing Machine,0.68,Bathroom,Heat,24.8,5.63
+2025-11-03 16:00:00,Ceiling Fan,0.69,Bedroom,Cool,24.4,6.21
+2025-11-03 17:00:00,Television,0.23,Dining Room,Normal,26.0,2.08
+2025-11-03 18:00:00,Air Conditioner,1.92,Balcony,Auto,22.8,15.78
+2025-11-03 19:00:00,Air Conditioner,0.3,Balcony,Eco,24.2,2.69
+2025-11-03 20:00:00,Air Conditioner,1.41,Bathroom,Heat,27.5,11.97
+2025-11-03 21:00:00,Television,1.89,Study Room,Auto,26.2,15.1
+2025-11-03 22:00:00,Laptop Charger,0.36,Study Room,Eco,18.3,2.94
+2025-11-03 23:00:00,Air Conditioner,1.24,Dining Room,Eco,20.0,10.84
+2025-11-04 00:00:00,Refrigerator,0.98,Garage,Normal,29.8,9.26
+2025-11-04 01:00:00,Room Heater,0.41,Bathroom,Cool,22.3,3.19
+2025-11-04 02:00:00,Microwave Oven,0.84,Bathroom,Auto,28.8,6.25
+2025-11-04 03:00:00,Microwave Oven,1.68,Utility Room,Cool,18.9,14.29
+2025-11-04 04:00:00,Light Bulb,1.01,Dining Room,Auto,22.4,7.91
+2025-11-04 05:00:00,Washing Machine,0.65,Living Room,Normal,21.8,4.88
+2025-11-04 06:00:00,Washing Machine,1.1,Kitchen,Normal,23.8,8.41
+2025-11-04 07:00:00,Light Bulb,0.42,Guest Room,Auto,20.4,3.51
+2025-11-04 08:00:00,Air Conditioner,1.54,Living Room,Cool,24.0,11.94
+2025-11-04 09:00:00,Air Conditioner,1.26,Bathroom,Auto,27.6,10.78
+2025-11-04 10:00:00,Laptop Charger,0.34,Living Room,Eco,27.1,3.1
+2025-11-04 11:00:00,Washing Machine,1.74,Kitchen,Heat,24.8,16.32
+2025-11-04 12:00:00,Room Heater,1.26,Balcony,Heat,20.6,9.84
+2025-11-04 13:00:00,Refrigerator,1.83,Garage,Auto,18.6,17.18
+2025-11-04 14:00:00,Laptop Charger,0.9,Kitchen,Auto,29.2,7.16
+2025-11-04 15:00:00,Television,0.34,Guest Room,Eco,27.6,2.61
+2025-11-04 16:00:00,Laptop Charger,1.49,Bedroom,Eco,24.8,12.79
+2025-11-04 17:00:00,Laptop Charger,2.27,Study Room,Eco,27.9,17.61
+2025-11-04 18:00:00,Washing Machine,1.3,Dining Room,Auto,26.3,10.38
+2025-11-04 19:00:00,Television,1.55,Kitchen,Normal,25.8,14.65
+2025-11-04 20:00:00,Refrigerator,2.18,Utility Room,Normal,27.7,16.81
+2025-11-04 21:00:00,Light Bulb,2.4,Garage,Cool,27.4,18.34
+2025-11-04 22:00:00,Refrigerator,1.43,Balcony,Auto,25.0,11.96
+2025-11-04 23:00:00,Light Bulb,1.33,Study Room,Normal,26.8,10.8
+2025-11-05 00:00:00,Laptop Charger,1.87,Balcony,Normal,18.7,13.99
+2025-11-05 01:00:00,Refrigerator,0.3,Garage,Heat,26.1,2.78
+2025-11-05 02:00:00,Ceiling Fan,2.11,Study Room,Auto,20.3,17.15
+2025-11-05 03:00:00,Washing Machine,0.99,Kitchen,Auto,18.8,8.51
+2025-11-05 04:00:00,Water Heater,2.27,Study Room,Auto,22.9,19.53
+2025-11-05 05:00:00,Refrigerator,1.57,Utility Room,Heat,22.8,11.41
+2025-11-05 06:00:00,Air Conditioner,1.25,Bedroom,Eco,24.5,11.29
+2025-11-05 07:00:00,Ceiling Fan,1.02,Balcony,Eco,27.8,9.18
+2025-11-05 08:00:00,Air Conditioner,0.97,Guest Room,Heat,27.8,8.28
+2025-11-05 09:00:00,Air Conditioner,0.85,Kitchen,Eco,21.7,8.0
+2025-11-05 10:00:00,Room Heater,2.43,Dining Room,Eco,29.2,20.11
+2025-11-05 11:00:00,Washing Machine,1.15,Bathroom,Cool,27.8,10.55
+2025-11-05 12:00:00,Light Bulb,2.33,Utility Room,Cool,22.2,21.25
+2025-11-05 13:00:00,Room Heater,1.87,Kitchen,Cool,26.0,17.04
+2025-11-05 14:00:00,Microwave Oven,2.08,Utility Room,Heat,23.1,15.5
+2025-11-05 15:00:00,Television,1.23,Study Room,Auto,24.1,10.66
+2025-11-05 16:00:00,Light Bulb,0.4,Utility Room,Normal,18.1,3.69
+2025-11-05 17:00:00,Light Bulb,1.17,Bathroom,Cool,25.1,10.87
+2025-11-05 18:00:00,Laptop Charger,0.74,Balcony,Eco,18.5,5.77
+2025-11-05 19:00:00,Laptop Charger,0.91,Balcony,Eco,29.5,7.0
+2025-11-05 20:00:00,Refrigerator,0.84,Utility Room,Heat,25.3,6.62
+2025-11-05 21:00:00,Television,0.9,Study Room,Eco,22.0,8.5
+2025-11-05 22:00:00,Ceiling Fan,2.32,Living Room,Eco,20.0,16.97
+2025-11-05 23:00:00,Laptop Charger,1.5,Study Room,Auto,20.1,13.44
+2025-11-06 00:00:00,Washing Machine,2.47,Garage,Cool,18.2,21.78
+2025-11-06 01:00:00,Room Heater,2.36,Garage,Heat,20.4,16.69
+2025-11-06 02:00:00,Room Heater,1.57,Guest Room,Cool,18.6,14.45
+2025-11-06 03:00:00,Air Conditioner,0.36,Kitchen,Normal,26.1,3.02
+2025-11-06 04:00:00,Refrigerator,2.28,Balcony,Cool,22.6,18.86
+2025-11-06 05:00:00,Room Heater,0.94,Utility Room,Heat,23.5,8.69
+2025-11-06 06:00:00,Washing Machine,2.05,Living Room,Cool,26.9,18.61
+2025-11-06 07:00:00,Room Heater,0.99,Utility Room,Heat,19.3,7.17
+2025-11-06 08:00:00,Air Conditioner,1.7,Garage,Eco,22.1,12.01
+2025-11-06 09:00:00,Room Heater,0.34,Living Room,Heat,20.5,2.42
+2025-11-06 10:00:00,Air Conditioner,1.84,Kitchen,Eco,22.0,14.19
+2025-11-06 11:00:00,Light Bulb,0.45,Living Room,Heat,27.4,3.55
+2025-11-06 12:00:00,Microwave Oven,0.65,Bedroom,Auto,18.4,6.1
+2025-11-06 13:00:00,Room Heater,1.83,Utility Room,Cool,26.5,13.54
+2025-11-06 14:00:00,Water Heater,0.89,Bedroom,Normal,22.4,7.62
+2025-11-06 15:00:00,Room Heater,1.36,Balcony,Heat,26.7,9.96
+2025-11-06 16:00:00,Washing Machine,2.05,Kitchen,Cool,29.2,17.83
+2025-11-06 17:00:00,Water Heater,1.45,Guest Room,Heat,21.6,12.62
+2025-11-06 18:00:00,Refrigerator,2.33,Guest Room,Auto,27.1,19.49
+2025-11-06 19:00:00,Microwave Oven,0.26,Garage,Eco,20.5,2.14
+2025-11-06 20:00:00,Air Conditioner,1.48,Living Room,Heat,24.0,13.48
+2025-11-06 21:00:00,Water Heater,2.49,Study Room,Normal,26.9,22.9
+2025-11-06 22:00:00,Washing Machine,2.36,Kitchen,Eco,25.0,19.76
+2025-11-06 23:00:00,Air Conditioner,1.32,Study Room,Auto,27.2,12.15
+2025-11-07 00:00:00,Ceiling Fan,0.57,Balcony,Eco,25.6,5.07
+2025-11-07 01:00:00,Laptop Charger,1.86,Kitchen,Heat,18.6,16.17
+2025-11-07 02:00:00,Water Heater,1.88,Kitchen,Eco,19.1,15.44
+2025-11-07 03:00:00,Laptop Charger,0.22,Dining Room,Heat,28.1,1.81
+2025-11-07 04:00:00,Ceiling Fan,2.02,Garage,Auto,20.6,14.74
+2025-11-07 05:00:00,Refrigerator,0.61,Living Room,Normal,28.5,5.23
+2025-11-07 06:00:00,Room Heater,1.51,Garage,Normal,18.6,14.31
+2025-11-07 07:00:00,Television,1.3,Utility Room,Auto,26.2,12.02
+2025-11-07 08:00:00,Washing Machine,0.35,Utility Room,Cool,28.7,3.14
+2025-11-07 09:00:00,Light Bulb,1.97,Balcony,Cool,18.8,17.74
+2025-11-07 10:00:00,Ceiling Fan,1.27,Living Room,Normal,26.2,9.26
+2025-11-07 11:00:00,Microwave Oven,1.38,Study Room,Cool,21.3,11.53
+2025-11-07 12:00:00,Television,0.67,Kitchen,Eco,18.1,5.3
+2025-11-07 13:00:00,Room Heater,1.31,Dining Room,Heat,22.8,11.31
+2025-11-07 14:00:00,Light Bulb,0.4,Garage,Eco,23.6,2.92
+2025-11-07 15:00:00,Air Conditioner,1.74,Utility Room,Heat,26.0,15.99
+2025-11-07 16:00:00,Television,1.48,Balcony,Auto,27.1,10.39
+2025-11-07 17:00:00,Ceiling Fan,2.09,Kitchen,Heat,23.6,16.41
+2025-11-07 18:00:00,Water Heater,1.82,Living Room,Cool,18.8,14.45
+2025-11-07 19:00:00,Laptop Charger,1.06,Garage,Eco,18.2,9.08
+2025-11-07 20:00:00,Refrigerator,0.51,Balcony,Normal,24.1,4.08
+2025-11-07 21:00:00,Air Conditioner,1.41,Balcony,Eco,22.1,11.56
+2025-11-07 22:00:00,Light Bulb,1.75,Balcony,Cool,27.4,16.05
+2025-11-07 23:00:00,Television,1.78,Kitchen,Normal,19.4,16.05
+2025-11-08 00:00:00,Ceiling Fan,0.69,Kitchen,Eco,22.5,6.18
+2025-11-08 01:00:00,Refrigerator,2.0,Bathroom,Auto,22.3,17.17
+2025-11-08 02:00:00,Microwave Oven,1.09,Study Room,Eco,27.8,9.31
+2025-11-08 03:00:00,Washing Machine,1.51,Utility Room,Heat,29.0,14.13
+2025-11-08 04:00:00,Laptop Charger,1.57,Utility Room,Cool,24.2,11.49
+2025-11-08 05:00:00,Room Heater,2.18,Bathroom,Eco,25.7,15.84
+2025-11-08 06:00:00,Washing Machine,1.97,Guest Room,Eco,24.8,15.92
+2025-11-08 07:00:00,Microwave Oven,0.32,Kitchen,Cool,29.1,2.47
+2025-11-08 08:00:00,Microwave Oven,1.19,Bathroom,Auto,20.6,9.83
+2025-11-08 09:00:00,Water Heater,0.31,Kitchen,Normal,24.2,2.49
+2025-11-08 10:00:00,Television,0.85,Utility Room,Eco,20.3,6.01
+2025-11-08 11:00:00,Microwave Oven,1.39,Guest Room,Heat,19.4,13.16
+2025-11-08 12:00:00,Washing Machine,2.43,Dining Room,Cool,22.3,21.2
+2025-11-08 13:00:00,Refrigerator,1.09,Garage,Eco,21.9,7.79
+2025-11-08 14:00:00,Room Heater,0.9,Dining Room,Eco,20.5,6.85
+2025-11-08 15:00:00,Washing Machine,0.73,Bathroom,Normal,24.6,5.52
+2025-11-08 16:00:00,Water Heater,1.4,Kitchen,Heat,19.6,10.04
+2025-11-08 17:00:00,Room Heater,1.21,Balcony,Cool,19.4,8.6
+2025-11-08 18:00:00,Refrigerator,1.32,Dining Room,Auto,20.7,10.0
+2025-11-08 19:00:00,Air Conditioner,0.4,Bedroom,Normal,26.6,3.51
+2025-11-08 20:00:00,Air Conditioner,1.5,Living Room,Eco,18.3,12.0
+2025-11-08 21:00:00,Television,1.84,Utility Room,Normal,23.3,17.45
+2025-11-08 22:00:00,Light Bulb,1.94,Bedroom,Eco,23.0,15.36
+2025-11-08 23:00:00,Room Heater,2.34,Bedroom,Eco,19.6,17.51
+2025-11-09 00:00:00,Ceiling Fan,1.39,Bathroom,Normal,21.8,12.14
+2025-11-09 01:00:00,Television,0.45,Dining Room,Auto,26.1,3.55
+2025-11-09 02:00:00,Microwave Oven,1.15,Study Room,Heat,18.6,8.92
+2025-11-09 03:00:00,Television,0.46,Guest Room,Eco,25.5,3.52
+2025-11-09 04:00:00,Refrigerator,0.69,Balcony,Cool,24.2,6.46
+2025-11-09 05:00:00,Ceiling Fan,0.69,Utility Room,Eco,20.6,5.23
+2025-11-09 06:00:00,Water Heater,2.4,Bedroom,Heat,29.5,22.29
+2025-11-09 07:00:00,Room Heater,0.63,Kitchen,Normal,20.5,5.33
+2025-11-09 08:00:00,Ceiling Fan,1.28,Dining Room,Heat,22.6,9.92
+2025-11-09 09:00:00,Washing Machine,1.44,Living Room,Eco,29.3,11.07
+2025-11-09 10:00:00,Microwave Oven,1.97,Garage,Eco,18.7,17.45
+2025-11-09 11:00:00,Ceiling Fan,0.55,Living Room,Cool,28.1,3.85
+2025-11-09 12:00:00,Microwave Oven,0.61,Garage,Heat,28.4,5.41
+2025-11-09 13:00:00,Laptop Charger,1.13,Guest Room,Normal,22.1,8.28
+2025-11-09 14:00:00,Microwave Oven,0.87,Living Room,Cool,25.8,7.11
+2025-11-09 15:00:00,Refrigerator,0.38,Bathroom,Auto,19.3,3.24
