@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from charts import plot_usage_by_appliance, plot_daily_cost_trend, plot_room_wise_usage
+import charts  # ✅ Importing the whole charts module instead of specific functions
 
 # ----------------------------
 # ⚡ SMART HOME ENERGY ANALYZER (EcoWatts)
@@ -51,7 +51,7 @@ with st.sidebar:
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
 
-    # Convert timestamp column
+    # Convert Timestamp column
     if 'Timestamp' in df.columns:
         df['Timestamp'] = pd.to_datetime(df['Timestamp'])
 
@@ -66,12 +66,12 @@ if uploaded_file:
 
     with col1:
         st.markdown("#### 🔌 Appliance-wise Energy Usage")
-        fig1 = plot_usage_by_appliance(df)
+        fig1 = charts.plot_usage_by_appliance(df)
         st.pyplot(fig1, use_container_width=True)
 
     with col2:
         st.markdown("#### 💰 Daily Energy Cost Trend")
-        fig2 = plot_daily_cost_trend(df)
+        fig2 = charts.plot_daily_cost_trend(df)
         st.pyplot(fig2, use_container_width=True)
 
     # ----------------------------
@@ -80,7 +80,7 @@ if uploaded_file:
     st.markdown("---")
     st.subheader("🏠 Room-wise Energy Usage")
     try:
-        fig3 = plot_room_wise_usage(df)
+        fig3 = charts.plot_room_wise_usage(df)
         st.pyplot(fig3, use_container_width=True)
     except Exception as e:
         st.warning(f"⚠️ Unable to load Room-wise chart: {e}")
