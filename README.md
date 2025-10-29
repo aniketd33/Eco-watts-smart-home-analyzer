@@ -1,52 +1,62 @@
-⚡ EcoWatts – Smart Home Energy Analyzer 🌿
+🌿 EcoWatts – Smart Home Energy Analyzer
+🏷️ Title
+EcoWatts – Smart Home Energy Analyzer
 
-📘 Overview:
-**EcoWatts** is a smart energy analytics system that monitors and analyzes home electricity consumption to promote **energy efficiency** and **cost savings**.  
-It uses **IoT-inspired data**, **machine learning models**, and **interactive visualizations** to help users understand their energy usage patterns and plan for a more sustainable lifestyle.
+🧭 Overview
+EcoWatts is a data-driven web application designed to monitor, analyze, and optimize household electricity consumption. The system helps users identify high-energy-consuming appliances, track daily/weekly usage trends, and receive actionable insights for saving energy and reducing electricity bills. Using real-time analytics and predictive modeling, EcoWatts promotes sustainable living and efficient energy management.
 
-🎯 Objectives:
-- Analyze appliance-wise and room-wise energy consumption.  
-- Predict future electricity usage using **Linear Regression**.  
-- Visualize consumption trends and cost patterns interactively.  
-- Provide eco-friendly recommendations for energy savings.
+⚙️ Features
+Energy Usage Dashboard – Interactive visualization of appliance-wise and room-wise electricity consumption.
+Cost Estimation – Calculates estimated energy costs based on kWh usage and tariff rates.
+Forecasting Model – Uses Linear Regression to predict future electricity consumption trends.
+Real-Time Data Upload – Supports CSV input of appliance usage data for analysis.
+Eco-Tips Generator – Suggests personalized, eco-friendly energy-saving recommendations.
+User-Friendly Interface – Built using Streamlit for an intuitive, responsive design.
+Downloadable Reports – Generates summary reports in CSV or PDF format.
+🧩 Dataset
+Name: energy_usage_Dataset.csv
 
-⚙️ Features:
-✅ **Real-Time Monitoring** – Displays electricity usage per appliance and room.  
-✅ **Forecasting** – Predicts future energy usage based on past data.  
-✅ **Cost Analysis** – Calculates and visualizes daily/monthly cost patterns.  
-✅ **Visualization Dashboard** – Built with Streamlit for easy data interaction.  
-✅ **Eco-Tips** – Suggests optimal usage patterns for saving power and reducing bills.  
+Description:
+Contains timestamped appliance usage data with the following columns:
 
-🧩 Tech Stack:
+Timestamp
+Appliance
+Usage_kWh
+Room
+Mode
+Temperature (°C)
+Cost (INR)
+Size: 200 records
+Source: Custom dataset or open-source (Kaggle / simulated IoT smart home dataset)
 
-| Category | Tools / Libraries |
-|-----------|-------------------|
-| Programming | Python |
-| Data Analysis | Pandas, NumPy |
-| Machine Learning | Scikit-learn (Linear Regression) |
-| Visualization | Matplotlib, Seaborn, Plotly |
-| Web Framework | Streamlit |
-| Dataset Format | CSV (IoT-based hourly data) |
+💻 Tech Stack
+Component	Technology
+Frontend	Streamlit
+Backend	Python (Pandas, NumPy)
+Visualization	Matplotlib, Plotly, Seaborn
+Machine Learning	Scikit-learn (Linear Regression)
+Storage	CSV / Local DB
+Deployment	Streamlit Cloud / GitHub Pages
+🤖 Model Summary
+Algorithm Used: Linear Regression
+Objective: Predict future energy consumption based on past usage patterns.
+Input Features: Time, appliance type, temperature, mode.
+Output: Forecasted energy usage (kWh).
+Performance Metrics: R² Score, Mean Absolute Error (MAE).
+🗓️ Project Timeline (2 Weeks)
+Week	Task Description
+Week 1	Data collection, cleaning, preprocessing, and exploratory data analysis (EDA). Build visualization dashboard using Streamlit.
+Week 2	Implement Linear Regression model, integrate insights into dashboard, deploy final app, and perform testing.
+🚀 Future Improvements
+Integrate IoT sensor data for real-time tracking.
+Add deep learning models (LSTM) for time-series forecasting.
+Build mobile app version for real-time monitoring.
+Include carbon footprint tracking and renewable energy comparison.
+Add alerts/notifications for excessive power usage.
+👨‍💻 Author
+Aniket Dombale
+Department of Technology, Savitribai Phule Pune University
 
-
-🧠 Machine Learning Workflow:
-
-1. **Data Collection** – Hourly appliance data from IoT sensors or CSV files.  
-2. **Data Preprocessing** – Cleaning, formatting timestamps, and aggregation by day.  
-3. **Feature Engineering** – Add `Date`, `Day_Index`, `Usage_kWh`, and `Cost(INR)` columns.  
-4. **Model Training** – Fit a **Linear Regression** model on daily total usage.  
-5. **Prediction** – Forecast next 10 days of electricity consumption.  
-6. **Visualization** – Plot actual vs. predicted usage using Matplotlib/Plotly.  
-
-
-🧠 Insights & Benefits:
-
-1.Identify which appliances consume the most energy.
-2.Plan electricity usage to reduce bills.
-3.Detect unusual consumption patterns.
-4.Promote eco-friendly energy habits.
-
-🏁 Conclusion:
-
-EcoWatts – Smart Home Energy Analyzer is an intelligent solution for understanding and optimizing electricity usage.
-By combining machine learning forecasting with visual analytics, it enables households to achieve sustainable energy consumption and cost efficiency.
+📜 License
+MIT License
+This project is open-source and free to use, modify, and distribute for academic and research purposes with proper attribution.
