@@ -1,1 +1,7 @@
-streamlit\npandas\nnumpy\nmatplotlib\nseaborn\nscikit-learn\nplotly
+streamlit==1.39.0
+pandas
+numpy
+matplotlib
+seaborn
+plotly
+scikit-learn
