@@ -1,94 +1,117 @@
 import streamlit as st
 import pandas as pd
-from charts import plot_usage_by_appliance, plot_daily_cost_trend, plot_temp_vs_usage
-from model import train_and_predict, load_and_preprocess
+from charts import plot_usage_by_appliance, plot_daily_cost_trend, plot_room_wise_usage
 
-# -----------------------------------------------------------
-# Streamlit App Configuration
-# -----------------------------------------------------------
-st.set_page_config(page_title='EcoWatts – Smart Home Energy Analyzer', layout='wide')
+# ----------------------------
+# ⚡ SMART HOME ENERGY ANALYZER (EcoWatts)
+# ----------------------------
+st.set_page_config(
+    page_title="EcoWatts Dashboard",
+    page_icon="⚡",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-st.title('🌿 EcoWatts – Smart Home Energy Analyzer')
-st.markdown('**A Streamlit app to visualize, analyze, and predict home energy usage**')
+# ----------------------------
+# Dashboard Title and Description
+# ----------------------------
+st.markdown(
+    """
+    <style>
+    .big-font {
+        font-size:32px !important;
+        font-weight:700;
+        color:#1E88E5;
+    }
+    .small-font {
+        font-size:18px !important;
+        color:#555;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-# -----------------------------------------------------------
-# Sidebar – File Upload and Model Settings
-# -----------------------------------------------------------
+st.markdown('<p class="big-font">⚡ EcoWatts – Smart Home Energy Analyzer</p>', unsafe_allow_html=True)
+st.markdown('<p class="small-font">Gain insights into electricity usage, cost trends, and room-wise consumption to promote energy efficiency.</p>', unsafe_allow_html=True)
+st.markdown("---")
+
+# ----------------------------
+# Upload CSV Section
+# ----------------------------
 with st.sidebar:
-    st.header('📂 Dataset')
-    uploaded_file = st.file_uploader('Upload CSV file', type=['csv'])
-    use_sample = st.checkbox('Use sample dataset (default)', value=True)
-    st.markdown('---')
+    st.header("📂 Upload Dataset")
+    uploaded_file = st.file_uploader("Upload your energy usage CSV file", type=["csv"])
+    st.markdown("---")
+    st.markdown("💡 **Tip:** Use your household energy log file or download a demo dataset to test the dashboard.")
 
-    st.header('⚙️ Model Settings')
-    predict_periods = st.number_input('Days to predict (simple forecast)', min_value=1, max_value=30, value=7)
-    st.markdown('---')
-
-# -----------------------------------------------------------
-# Load Dataset
-# -----------------------------------------------------------
-if uploaded_file is not None:
+# ----------------------------
+# Load and Display Data
+# ----------------------------
+if uploaded_file:
     df = pd.read_csv(uploaded_file)
-else:
-    sample_path = 'energy_usage_Dataset.csv'
+
+    # Convert timestamp column
+    if 'Timestamp' in df.columns:
+        df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+
+    st.success("✅ Data uploaded successfully!")
+    st.dataframe(df.head())
+
+    # ----------------------------
+    # Visual Insights Section
+    # ----------------------------
+    st.subheader("📊 Visual Insights")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("#### 🔌 Appliance-wise Energy Usage")
+        fig1 = plot_usage_by_appliance(df)
+        st.pyplot(fig1, use_container_width=True)
+
+    with col2:
+        st.markdown("#### 💰 Daily Energy Cost Trend")
+        fig2 = plot_daily_cost_trend(df)
+        st.pyplot(fig2, use_container_width=True)
+
+    # ----------------------------
+    # Room-wise Energy Usage
+    # ----------------------------
+    st.markdown("---")
+    st.subheader("🏠 Room-wise Energy Usage")
     try:
-        df = pd.read_csv(sample_path)
+        fig3 = plot_room_wise_usage(df)
+        st.pyplot(fig3, use_container_width=True)
     except Exception as e:
-        st.error(f'❌ Could not load sample dataset: {e}')
-        st.stop()
+        st.warning(f"⚠️ Unable to load Room-wise chart: {e}")
 
-# -----------------------------------------------------------
-# Data Preprocessing
-# -----------------------------------------------------------
-df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce')
+    # ----------------------------
+    # Insights Section
+    # ----------------------------
+    st.markdown("---")
+    st.subheader("💡 Insights Summary")
+    st.info("""
+    - High consumption appliances highlight optimization opportunities.  
+    - The **Daily Cost Trend** helps track electricity spending habits.  
+    - **Room-wise Usage** reveals the most energy-intensive areas in your home.  
+    - Can be integrated with **IoT sensors** for real-time analytics.
+    """)
 
-st.subheader('🧾 Data Preview')
-st.dataframe(df.head())
+else:
+    st.warning("👆 Please upload a CSV file to begin analysis.")
 
-# Detect flexible column names
-usage_col = 'Usage_kWh' if 'Usage_kWh' in df.columns else 'Usage'
-temp_col = 'Temp(C)' if 'Temp(C)' in df.columns else 'Temperature'
+# ----------------------------
+# Footer Section
+# ----------------------------
+st.markdown("---")
+st.markdown(
+    """
+    <div style='text-align:center; font-size:16px; color:gray;'>
+    👨‍💻 <b>Author:</b> Aniket Dombale <br>
+    © 2025 | EcoWatts Smart Home Energy Analyzer | Open Source Project
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-# -----------------------------------------------------------
-# Visualizations
-# -----------------------------------------------------------
-st.subheader('📊 Visualizations')
-
-col1, col2 = st.columns(2)
-
-with col1:
-    fig1 = plot_usage_by_appliance(df)
-    st.pyplot(fig1)
-
-with col2:
-    fig2 = plot_daily_cost_trend(df)
-    st.pyplot(fig2)
-
-# Temperature vs Usage chart (fixed)
-st.subheader('🌡️ Temperature vs Energy Usage')
-try:
-    fig3 = plot_temp_vs_usage(df, temp_col=temp_col, usage_col=usage_col)
-    st.pyplot(fig3)
-except Exception as e:
-    st.warning(f"⚠️ Could not display Temperature vs Usage chart. Error: {e}")
-
-# -----------------------------------------------------------
-# Model Training & Prediction
-# -----------------------------------------------------------
-st.subheader('🤖 Forecast (Linear Regression)')
-X, y, df_daily = load_and_preprocess(df)
-
-if st.button('Train model & predict'):
-    pred_df, metrics = train_and_predict(X, y, periods=int(predict_periods), df_daily=df_daily)
-    st.write('**📈 Model Performance Metrics:**')
-    st.write(metrics)
-    st.line_chart(pred_df.set_index('date')['predicted_usage'])
-    st.table(pred_df.head(10))
-
-# -----------------------------------------------------------
-# Footer
-# -----------------------------------------------------------
-st.markdown('---')
-st.write('**👨‍💻 Author:** Aniket Dombale')
-st.caption('EcoWatts Smart Home Energy Analyzer | © 2025 Open Source Project')
 
