@@ -1,82 +1,93 @@
-import matplotlib.pyplot as plt
+import plotly.express as px
+import pandas as pd
 
-# ----------------------------
-# Appliance Usage Chart
-# ----------------------------
+# ----------------------------------------------
+# ⚡ Chart 1: Energy Usage by Appliance
+# ----------------------------------------------
 def plot_usage_by_appliance(df):
-    fig, ax = plt.subplots(figsize=(5, 3))
-    bars = df.groupby('Appliance')['Usage_kWh'].sum().sort_values(ascending=False).plot(
-        kind='bar',
-        ax=ax,
-        color='#42A5F5',
-        edgecolor='black'
+    """
+    Plots total energy usage grouped by appliance.
+    """
+    if 'Appliance' not in df.columns or 'Usage_kWh' not in df.columns:
+        raise ValueError("Dataset must include 'Appliance' and 'Usage_kWh' columns.")
+
+    usage_data = df.groupby('Appliance')['Usage_kWh'].sum().reset_index()
+    fig = px.bar(
+        usage_data,
+        x='Appliance',
+        y='Usage_kWh',
+        text='Usage_kWh',
+        color='Appliance',
+        color_discrete_sequence=px.colors.sequential.Greens_r,
+        title='🔌 Energy Usage by Appliance',
+        template='plotly_white'
     )
-
-    for p in bars.patches:
-        ax.annotate(
-            f"{p.get_height():.1f}",
-            (p.get_x() + p.get_width() / 2, p.get_height()),
-            ha='center', va='bottom', fontsize=8, color='black'
-        )
-
-    ax.set_title('🔌 Energy Usage by Appliance', fontsize=11, fontweight='bold', pad=10)
-    ax.set_ylabel('Usage (kWh)', fontsize=9)
-    ax.set_xlabel('Appliance', fontsize=9)
-    plt.xticks(rotation=30, ha='right')
-    plt.grid(True, axis='y', linestyle='--', alpha=0.4)
-    plt.tight_layout(pad=1)
+    fig.update_traces(texttemplate='%{text:.2f} kWh', textposition='outside')
+    fig.update_layout(
+        xaxis_title='Appliance',
+        yaxis_title='Total Usage (kWh)',
+        showlegend=False,
+        margin=dict(l=20, r=20, t=60, b=20)
+    )
     return fig
 
-# ----------------------------
-# Daily Cost Trend Chart
-# ----------------------------
+
+# ----------------------------------------------
+# ⚡ Chart 2: Daily Energy Cost Trend
+# ----------------------------------------------
 def plot_daily_cost_trend(df):
-    fig, ax = plt.subplots(figsize=(5, 3))
-    df['Date'] = df['Timestamp'].dt.date
-    daily_cost = df.groupby('Date')['Cost(INR)'].sum()
-    daily_cost.plot(ax=ax, color='#FFA726', linewidth=2, marker='o')
+    """
+    Shows total daily electricity cost trend using line + markers.
+    """
+    if 'Timestamp' not in df.columns or 'Cost(INR)' not in df.columns:
+        raise ValueError("Dataset must include 'Timestamp' and 'Cost(INR)' columns.")
 
-    ax.set_title('📅 Daily Energy Cost Trend', fontsize=11, fontweight='bold', pad=10)
-    ax.set_ylabel('Cost (INR)', fontsize=9)
-    ax.set_xlabel('Date', fontsize=9)
-    plt.xticks(rotation=45, ha='right', fontsize=8)
-    plt.grid(True, linestyle='--', alpha=0.5)
-    plt.tight_layout(pad=1)
-    return fig
+    df['Date'] = pd.to_datetime(df['Timestamp']).dt.date
+    daily_cost = df.groupby('Date')['Cost(INR)'].sum().reset_index()
 
-# ----------------------------
-# Room-wise Usage Chart
-# ----------------------------
-def plot_room_wise_usage(df):
-    """Displays total energy usage per room in compact professional style."""
-    if 'Room' not in df.columns or 'Usage_kWh' not in df.columns:
-        raise ValueError("Dataset must contain 'Room' and 'Usage_kWh' columns.")
-
-    fig, ax = plt.subplots(figsize=(5, 3))  # compact chart size
-    bars = df.groupby('Room')['Usage_kWh'].sum().plot(
-        kind='bar',
-        ax=ax,
-        color='#FFB74D',
-        edgecolor='black'
+    fig = px.line(
+        daily_cost,
+        x='Date',
+        y='Cost(INR)',
+        markers=True,
+        title='📅 Daily Energy Cost Trend',
+        template='plotly_white',
+        color_discrete_sequence=['#2E8B57']
     )
-
-    for p in bars.patches:
-        ax.annotate(
-            f"{p.get_height():.1f}",
-            (p.get_x() + p.get_width() / 2, p.get_height()),
-            ha='center',
-            va='bottom',
-            fontsize=8,
-            color='black'
-        )
-
-    ax.set_title('🏠 Room-wise Energy Usage', fontsize=11, fontweight='bold', pad=10)
-    ax.set_ylabel('Usage (kWh)', fontsize=9)
-    ax.set_xlabel('Room', fontsize=9)
-    plt.xticks(rotation=30, ha='right')
-    plt.grid(True, axis='y', linestyle='--', alpha=0.5)
-    plt.tight_layout(pad=1)
+    fig.update_traces(line=dict(width=3))
+    fig.update_layout(
+        xaxis_title='Date',
+        yaxis_title='Total Cost (₹)',
+        margin=dict(l=20, r=20, t=60, b=40),
+        xaxis_tickangle=-45
+    )
     return fig
 
+
+# ----------------------------------------------
+# ⚡ Chart 3: Room-wise Energy Usage Distribution
+# ----------------------------------------------
+def plot_room_wise_usage(df):
+    """
+    Displays the percentage of energy consumption per room (pie chart).
+    """
+    if 'Room' not in df.columns or 'Usage_kWh' not in df.columns:
+        raise ValueError("Dataset must include 'Room' and 'Usage_kWh' columns.")
+
+    room_usage = df.groupby('Room')['Usage_kWh'].sum().reset_index()
+    fig = px.pie(
+        room_usage,
+        names='Room',
+        values='Usage_kWh',
+        title='🏠 Room-wise Energy Usage Distribution',
+        hole=0.4,
+        color_discrete_sequence=px.colors.sequential.Aggrnyl
+    )
+    fig.update_layout(
+        showlegend=True,
+        legend_title_text='Rooms',
+        margin=dict(l=40, r=40, t=60, b=40)
+    )
+    return fig
 
 
