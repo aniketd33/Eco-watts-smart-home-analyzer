@@ -1,77 +1,49 @@
 import pandas as pd
+import plotly.graph_objects as go
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, r2_score
 import numpy as np
-import plotly.graph_objects as go
 
-# -----------------------------------------------------
-# 🧹 Prepare Data for Forecasting
-# -----------------------------------------------------
 def prepare_forecast_data(df):
-    df["Date"] = pd.to_datetime(df["Timestamp"]).dt.date
-    daily_usage = df.groupby("Date")["Usage_kWh"].sum().reset_index()
-    daily_usage["DayIndex"] = np.arange(len(daily_usage))
-    return daily_usage
+    daily = df.groupby(df["Timestamp"].dt.date)["Usage_kWh"].sum().reset_index()
+    daily.columns = ["Date", "Usage_kWh"]
+    daily["Day_Index"] = range(len(daily))
+    return daily
 
-# -----------------------------------------------------
-# 🧠 Train Forecast Model (Linear Regression)
-# -----------------------------------------------------
-def train_forecast_model(daily_usage):
-    X = daily_usage[["DayIndex"]]
-    y = daily_usage["Usage_kWh"]
+def train_forecast_model(data):
+    X = data[["Day_Index"]]
+    y = data["Usage_kWh"]
 
     model = LinearRegression()
     model.fit(X, y)
-    y_pred = model.predict(X)
+    preds = model.predict(X)
 
-    mae = mean_absolute_error(y, y_pred)
-    r2 = r2_score(y, y_pred)
+    mae = mean_absolute_error(y, preds)
+    r2 = r2_score(y, preds)
 
     return model, mae, r2
 
-# -----------------------------------------------------
-# 🔮 Forecast Next 7 Days
-# -----------------------------------------------------
-def forecast_next_days(model, daily_usage, days_ahead=7):
-    last_index = daily_usage["DayIndex"].max()
-    future_indices = np.arange(last_index + 1, last_index + days_ahead + 1)
-    forecast_values = model.predict(future_indices.reshape(-1, 1))
-    forecast_dates = pd.date_range(start=daily_usage["Date"].iloc[-1], periods=days_ahead + 1, closed='right')
-    
-    forecast_df = pd.DataFrame({
-        "Date": forecast_dates,
-        "Forecast_Usage_kWh": forecast_values
+def forecast_next_days(model, data, days_ahead=7):
+    last_index = data["Day_Index"].max()
+    future_days = np.arange(last_index + 1, last_index + 1 + days_ahead)
+    preds = model.predict(future_days.reshape(-1, 1))
+
+    forecast = pd.DataFrame({
+        "Date": pd.date_range(start=data["Date"].iloc[-1], periods=days_ahead + 1, freq="D")[1:],
+        "Predicted_Usage_kWh": preds
     })
-    return forecast_df
+    return forecast
 
-# -----------------------------------------------------
-# 📈 Plot Forecast Results
-# -----------------------------------------------------
-def plot_forecast_results(daily_usage, forecast_df):
+def plot_forecast_results(data, forecast):
     fig = go.Figure()
+    fig.add_trace(go.Scatter(x=data["Date"], y=data["Usage_kWh"], mode="lines+markers",
+                             name="Actual Usage", line=dict(color="#00796b")))
+    fig.add_trace(go.Scatter(x=forecast["Date"], y=forecast["Predicted_Usage_kWh"],
+                             mode="lines+markers", name="Forecast",
+                             line=dict(color="#ff7043", dash="dash")))
 
-    # Actual data
-    fig.add_trace(go.Scatter(
-        x=daily_usage["Date"], y=daily_usage["Usage_kWh"],
-        mode="lines+markers", name="Actual Usage",
-        line=dict(color="#2d6a4f", width=3)
-    ))
-
-    # Forecast data
-    fig.add_trace(go.Scatter(
-        x=forecast_df["Date"], y=forecast_df["Forecast_Usage_kWh"],
-        mode="lines+markers", name="Forecasted Usage",
-        line=dict(color="#74c69d", dash="dot", width=3)
-    ))
-
-    fig.update_layout(
-        title="🔮 Energy Usage Forecast (Next 7 Days)",
-        xaxis_title="Date",
-        yaxis_title="Usage (kWh)",
-        font=dict(family="Poppins", size=14, color="#1b4332"),
-        template="plotly_white",
-        plot_bgcolor="rgba(0,0,0,0)"
-    )
-
+    fig.update_layout(title="Energy Usage Forecast (Next 7 Days)",
+                      xaxis_title="Date", yaxis_title="Energy Usage (kWh)",
+                      template="plotly_white")
     return fig
 
