@@ -1,82 +1,39 @@
 import plotly.express as px
 import pandas as pd
 
-# -----------------------------------------------------
-# 📊 Appliance-wise Energy Usage Chart
-# -----------------------------------------------------
 def plot_usage_by_appliance(df):
-    try:
-        fig = px.bar(
-            df.groupby("appliance")["Usage_kWh"].sum().reset_index(),
-            x="appliance",
-            y="Usage_kWh",
-            color="appliance",
-            title="🔌 Energy Usage by Appliance",
-            text_auto=".2f",
-            template="plotly_white",
-        )
-        fig.update_layout(
-            title_x=0.3,
-            showlegend=False,
-            xaxis_title="Appliance",
-            yaxis_title="Energy Usage (kWh)",
-            font=dict(family="Poppins", size=14, color="#2d6a4f"),
-            plot_bgcolor="rgba(0,0,0,0)",
-        )
-        return fig
-    except Exception as e:
-        raise Exception(f"Error in plot_usage_by_appliance: {e}")
+    fig = px.pie(df, names='appliance', values='Usage_kWh',
+                 color_discrete_sequence=px.colors.qualitative.Pastel,
+                 title="Appliance-wise Energy Usage")
+    fig.update_traces(textinfo='percent+label')
+    return fig
 
-# -----------------------------------------------------
-# 💰 Daily Energy Cost Trend
-# -----------------------------------------------------
+
 def plot_daily_cost_trend(df):
-    try:
-        df["Date"] = pd.to_datetime(df["Timestamp"]).dt.date
-        daily_cost = df.groupby("Date")["Cost(INR)"].sum().reset_index()
+    df_daily = df.groupby(df["Timestamp"].dt.date)["Cost(INR)"].sum().reset_index()
+    fig = px.line(df_daily, x="Timestamp", y="Cost(INR)", markers=True,
+                  title="Daily Energy Cost Trend (INR)",
+                  color_discrete_sequence=["#00796b"])
+    fig.update_layout(xaxis_title="Date", yaxis_title="Total Cost (₹)")
+    return fig
 
-        fig = px.line(
-            daily_cost,
-            x="Date",
-            y="Cost(INR)",
-            markers=True,
-            title="📆 Daily Energy Cost Trend",
-            template="plotly_white",
-            line_shape="spline"
-        )
-        fig.update_traces(line_color="#1b4332", line_width=3)
-        fig.update_layout(
-            xaxis=dict(showgrid=False, tickangle=-45),
-            yaxis_title="Cost (INR)",
-            font=dict(family="Poppins", size=14, color="#1b4332"),
-            plot_bgcolor="rgba(0,0,0,0)"
-        )
-        return fig
-    except Exception as e:
-        raise Exception(f"Error in plot_daily_cost_trend: {e}")
 
-# -----------------------------------------------------
-# 🏠 Room-wise Energy Usage (Compact)
-# -----------------------------------------------------
 def plot_room_wise_usage(df):
-    try:
-        room_usage = df.groupby("Room")["Usage_kWh"].sum().reset_index()
-        fig = px.pie(
-            room_usage,
-            names="Room",
-            values="Usage_kWh",
-            hole=0.4,
-            color_discrete_sequence=px.colors.sequential.Greens_r,
-            title="🏠 Room-wise Energy Usage"
-        )
-        fig.update_traces(textinfo="percent+label", textfont_size=14)
-        fig.update_layout(
-            title_x=0.3,
-            font=dict(family="Poppins", size=14, color="#2d6a4f"),
-            showlegend=True
-        )
-        return fig
-    except Exception as e:
-        raise Exception(f"Error in plot_room_wise_usage: {e}")
+    room_usage = df.groupby("Room")["Usage_kWh"].sum().reset_index()
+    fig = px.bar(room_usage, x="Room", y="Usage_kWh",
+                 color="Room", title="Room-wise Energy Usage",
+                 color_discrete_sequence=px.colors.qualitative.Vivid)
+    fig.update_layout(bargap=0.4)
+    return fig
+
+
+def plot_peak_usage_timeline(df):
+    hourly_usage = df.groupby(df["Timestamp"].dt.hour)["Usage_kWh"].sum().reset_index()
+    fig = px.bar(hourly_usage, x="Timestamp", y="Usage_kWh",
+                 title="Peak Usage Hours in a Day",
+                 color_discrete_sequence=["#004d40"])
+    fig.update_layout(xaxis_title="Hour of Day", yaxis_title="Usage (kWh)")
+    return fig
+
 
 
