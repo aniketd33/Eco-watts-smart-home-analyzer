@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import base64
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from charts import (
     plot_usage_by_appliance,
@@ -9,125 +9,113 @@ from charts import (
     plot_room_wise_usage,
     plot_peak_usage_timeline,
 )
-import model  # ML forecasting
+import model
 
-# -------------------------- PAGE CONFIG --------------------------------
-st.set_page_config(page_title="EcoWatts – Smart Energy Analyzer", page_icon="⚡", layout="wide")
+# ---------------------------------------------------------
+# 🌿 PAGE CONFIG
+# ---------------------------------------------------------
+st.set_page_config(
+    page_title="EcoWatts Smart Home Energy Analyzer",
+    page_icon="⚡",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-# -------------------------- CUSTOM CSS ---------------------------------
-st.markdown("""
-<style>
-/* Background gradient */
-[data-testid="stAppViewContainer"] {
-    background: linear-gradient(120deg, #e0f7fa, #e8f5e9);
-    color: #0d1b2a;
-}
+# ---------------------------------------------------------
+# 🌈 CUSTOM STYLING (CSS)
+# ---------------------------------------------------------
+with open("style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-/* Sidebar style */
-[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #b2dfdb, #a5d6a7);
-    color: #004d40;
-}
-
-/* Headers */
-h1, h2, h3 {
-    color: #004d40 !important;
-    font-family: 'Poppins', sans-serif;
-}
-
-/* Buttons and inputs */
-.stButton > button {
-    background-color: #00796b;
-    color: white;
-    border-radius: 10px;
-    border: none;
-    padding: 0.6em 1.2em;
-    font-weight: 600;
-}
-.stButton > button:hover {
-    background-color: #004d40;
-}
-
-/* Info boxes */
-.stAlert {
-    border-radius: 10px;
-}
-
-/* File uploader */
-[data-testid="stFileUploader"] {
-    background-color: rgba(255,255,255,0.7);
-    border-radius: 12px;
-    padding: 1em;
-}
-
-/* Cards */
-.block-container {
-    padding-top: 2rem;
-}
-
-/* Footer */
-.footer {
-    text-align: center;
-    padding: 1.5rem;
-    font-size: 0.9rem;
-    color: #004d40;
-    opacity: 0.8;
-}
-</style>
-""", unsafe_allow_html=True)
-
-# -------------------------- SIDEBAR ---------------------------------
-st.sidebar.title("⚡ EcoWatts Menu")
-st.sidebar.markdown("### Navigate")
-page = st.sidebar.radio("",
-                        ["🏠 Dashboard", "📊 Analytics", "🔮 Forecast", "ℹ️ About"],
-                        label_visibility="collapsed")
-
+# ---------------------------------------------------------
+# 🧭 SIDEBAR NAVIGATION
+# ---------------------------------------------------------
+st.sidebar.image("https://cdn-icons-png.flaticon.com/512/4814/4814268.png", width=100)
+st.sidebar.title("⚡ EcoWatts Dashboard")
+page = st.sidebar.radio(
+    "Navigate to:",
+    ["🏠 Overview", "📊 Insights", "🔮 Forecasting", "ℹ️ About"]
+)
 st.sidebar.markdown("---")
-st.sidebar.info("Developed by **Aniket Dombale © 2025**")
-uploaded_file = st.sidebar.file_uploader("Upload CSV Data", type=["csv"])
+st.sidebar.markdown("**👨‍💻 Author:** Aniket Dombale\n© 2025 | Open Source Project")
 
-# -------------------------- MAIN DASHBOARD -----------------------------
-st.title("⚡ EcoWatts – Smart Home Energy Analyzer")
+# ---------------------------------------------------------
+# 🏠 PAGE 1: OVERVIEW
+# ---------------------------------------------------------
+if page == "🏠 Overview":
+    st.title("⚡ EcoWatts Smart Home Energy Analyzer")
+    st.markdown("""
+    Welcome to the **EcoWatts Dashboard** — your intelligent home energy analyzer.  
+    Upload your dataset to visualize appliance usage, daily costs, and forecast energy needs.
+    """)
 
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    df["Timestamp"] = pd.to_datetime(df["Timestamp"])
+    uploaded_file = st.file_uploader("📤 Upload your energy usage CSV file", type=["csv"])
 
-    # Dashboard
-    if page == "🏠 Dashboard":
-        st.subheader("🏡 Overview Dashboard")
+    if uploaded_file:
+        df = pd.read_csv(uploaded_file)
 
-        total_usage = df["Usage_kWh"].sum()
-        total_cost = df["Cost(INR)"].sum()
-        avg_temp = df["Temp(C)"].mean()
+        # Convert Timestamp column
+        if 'Timestamp' in df.columns:
+            df['Timestamp'] = pd.to_datetime(df['Timestamp'])
 
-        col1, col2, col3 = st.columns(3)
-        col1.metric("Total Energy Used (kWh)", f"{total_usage:.2f}")
-        col2.metric("Total Cost (INR)", f"₹{total_cost:.2f}")
-        col3.metric("Average Temperature (°C)", f"{avg_temp:.1f}")
+        st.success("✅ Data uploaded successfully!")
+        st.dataframe(df.head())
 
-        st.markdown("### ⚙️ Appliance-wise Usage")
-        fig1 = plot_usage_by_appliance(df)
-        st.plotly_chart(fig1, use_container_width=True)
+        st.markdown("### 📈 Quick Metrics")
+        total_usage = df['Usage_kWh'].sum()
+        total_cost = df['Cost(INR)'].sum()
+        avg_temp = df['Temp(C)'].mean()
 
-        st.markdown("### 🕒 Peak Usage Timeline")
-        fig4 = plot_peak_usage_timeline(df)
-        st.plotly_chart(fig4, use_container_width=True)
+        c1, c2, c3 = st.columns(3)
+        c1.metric("🔋 Total Usage (kWh)", f"{total_usage:.2f}")
+        c2.metric("💰 Total Cost (₹)", f"{total_cost:.2f}")
+        c3.metric("🌡️ Avg Temperature (°C)", f"{avg_temp:.1f}")
 
-    # Analytics
-    elif page == "📊 Analytics":
-        st.subheader("📈 Detailed Analytics")
+# ---------------------------------------------------------
+# 📊 PAGE 2: VISUAL INSIGHTS
+# ---------------------------------------------------------
+elif page == "📊 Insights":
+    st.title("📊 Visual Insights Dashboard")
 
-        fig2 = plot_daily_cost_trend(df)
-        st.plotly_chart(fig2, use_container_width=True)
+    uploaded_file = st.file_uploader("📤 Upload your energy usage CSV file", type=["csv"])
 
+    if uploaded_file:
+        df = pd.read_csv(uploaded_file)
+        if 'Timestamp' in df.columns:
+            df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+
+        col1, col2 = st.columns(2)
+        with col1:
+            fig1 = plot_usage_by_appliance(df)
+            st.pyplot(fig1)
+        with col2:
+            fig2 = plot_daily_cost_trend(df)
+            st.pyplot(fig2)
+
+        st.markdown("---")
+        st.subheader("🏠 Room-wise Energy Usage")
         fig3 = plot_room_wise_usage(df)
-        st.plotly_chart(fig3, use_container_width=True)
+        st.pyplot(fig3)
 
-    # Forecast
-    elif page == "🔮 Forecast":
-        st.subheader("🔮 Energy Usage Forecast")
+        st.markdown("---")
+        st.subheader("⏰ Peak Usage Timeline")
+        fig4 = plot_peak_usage_timeline(df)
+        st.pyplot(fig4)
+
+    else:
+        st.warning("👆 Please upload a CSV file to view insights.")
+
+# ---------------------------------------------------------
+# 🔮 PAGE 3: FORECASTING
+# ---------------------------------------------------------
+elif page == "🔮 Forecasting":
+    st.title("🔮 Energy Usage Forecasting")
+
+    uploaded_file = st.file_uploader("📤 Upload your dataset for forecasting", type=["csv"])
+    if uploaded_file:
+        df = pd.read_csv(uploaded_file)
+        if 'Timestamp' in df.columns:
+            df['Timestamp'] = pd.to_datetime(df['Timestamp'])
 
         try:
             daily_data = model.prepare_forecast_data(df)
@@ -136,31 +124,29 @@ if uploaded_file is not None:
             fig_forecast = model.plot_forecast_results(daily_data, forecast_df)
 
             st.plotly_chart(fig_forecast, use_container_width=True)
-            st.info(f"✅ Model Performance: MAE = {mae:.2f}, R² = {r2:.2f}")
-
+            st.success(f"✅ Model Performance: MAE = {mae:.2f}, R² = {r2:.2f}")
         except Exception as e:
             st.warning(f"⚠️ Forecasting unavailable: {e}")
-
-    # About
     else:
-        st.subheader("ℹ️ About This Project")
-        st.write("""
-        EcoWatts is a smart analytics dashboard designed to help households monitor and optimize 
-        their electricity usage efficiently.  
-        **Features include:**
-        - Appliance and room-level insights  
-        - Daily and peak usage visualization  
-        - AI-powered energy forecasting  
-        - Clean, professional UI for easy interpretation
-        """)
+        st.info("📥 Upload a dataset to generate forecasts.")
 
-else:
-    st.warning("👋 Please upload your dataset to continue.")
+# ---------------------------------------------------------
+# ℹ️ PAGE 4: ABOUT
+# ---------------------------------------------------------
+elif page == "ℹ️ About":
+    st.title("ℹ️ About EcoWatts Dashboard")
+    st.markdown("""
+    **EcoWatts** is a Streamlit-powered intelligent dashboard that visualizes and predicts
+    household energy usage using **machine learning** and **data visualization**.
 
-# -------------------------- FOOTER ---------------------------------
-st.markdown("""
-<div class="footer">
-    © 2025 EcoWatts | Powered by Streamlit ⚡
-</div>
-""", unsafe_allow_html=True)
+    **Key Features:**
+    - Appliance-wise energy breakdown  
+    - Daily cost trend visualization  
+    - Room-wise power analytics  
+    - ML-based forecasting of upcoming energy demand  
+
+    **Developed by:** *Aniket Dombale*  
+    **University:** Savitribai Phule Pune University  
+    **Department:** Data Science (Department of Technology)
+    """)
 
