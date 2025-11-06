@@ -1,80 +1,67 @@
 import pandas as pd
+import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, r2_score
 import plotly.graph_objects as go
-import numpy as np
 
-
-# ---------------------------------
-# 📅 Step 1: Prepare Forecast Data
-# ---------------------------------
+# ------------------------------------------
+# Prepare data for forecasting
+# ------------------------------------------
 def prepare_forecast_data(df):
-    df["Date"] = df["Timestamp"].dt.date
+    df["Date"] = pd.to_datetime(df["Timestamp"]).dt.date
     daily_usage = df.groupby("Date")["Usage_kWh"].sum().reset_index()
     daily_usage["Day_Index"] = np.arange(len(daily_usage))
     return daily_usage
 
-
-# ---------------------------------
-# 🧠 Step 2: Train Forecast Model
-# ---------------------------------
+# ------------------------------------------
+# Train forecasting model
+# ------------------------------------------
 def train_forecast_model(daily_usage):
     X = daily_usage[["Day_Index"]]
     y = daily_usage["Usage_kWh"]
     model = LinearRegression()
     model.fit(X, y)
-
-    preds = model.predict(X)
-    mae = mean_absolute_error(y, preds)
-    r2 = r2_score(y, preds)
+    y_pred = model.predict(X)
+    mae = mean_absolute_error(y, y_pred)
+    r2 = r2_score(y, y_pred)
     return model, mae, r2
 
-
-# ---------------------------------
-# 🔮 Step 3: Forecast Future Usage
-# ---------------------------------
-def forecast_next_days(model, daily_usage, days_ahead=7):
-    last_index = daily_usage["Day_Index"].max()
-    future_idx = np.arange(last_index + 1, last_index + days_ahead + 1)
-    future_pred = model.predict(future_idx.reshape(-1, 1))
-
-    forecast_df = pd.DataFrame({
-        "Date": pd.date_range(
-            start=pd.to_datetime(daily_usage["Date"].max()) + pd.Timedelta(days=1),
-            periods=days_ahead
-        ),
-        "Predicted_Usage_kWh": future_pred
-    })
+# ------------------------------------------
+# Forecast next few days
+# ------------------------------------------
+def forecast_next_days(model, daily_usage, future_days=7):
+    last_day_index = daily_usage["Day_Index"].max()
+    future_indices = np.arange(last_day_index + 1, last_day_index + future_days + 1)
+    future_predictions = model.predict(future_indices.reshape(-1, 1))
+    future_dates = pd.date_range(start=daily_usage["Date"].iloc[-1], periods=future_days + 1, closed="right")
+    forecast_df = pd.DataFrame({"Date": future_dates, "Predicted_Usage_kWh": future_predictions})
     return forecast_df
 
-
-# ---------------------------------
-# 📉 Step 4: Plot Forecast Results
-# ---------------------------------
+# ------------------------------------------
+# Plot forecast results
+# ------------------------------------------
 def plot_forecast_results(daily_usage, forecast_df):
     fig = go.Figure()
 
-    # Historical Data
+    # Actual usage
     fig.add_trace(go.Scatter(
         x=daily_usage["Date"], y=daily_usage["Usage_kWh"],
-        mode="lines+markers", name="Actual Usage",
-        line=dict(color="#0077b6", width=3)
+        mode="lines+markers", name="Actual Usage (kWh)",
+        line=dict(color="#1b4332")
     ))
 
-    # Forecasted Data
+    # Forecasted usage
     fig.add_trace(go.Scatter(
         x=forecast_df["Date"], y=forecast_df["Predicted_Usage_kWh"],
-        mode="lines+markers", name="Forecasted Usage",
-        line=dict(color="#ffb703", dash="dash", width=3)
+        mode="lines+markers", name="Forecast (Next Days)",
+        line=dict(color="#52b788", dash="dash")
     ))
 
     fig.update_layout(
-        title="🔮 Energy Usage Forecast (Next 7 Days)",
+        title="Energy Consumption Forecast",
         xaxis_title="Date",
-        yaxis_title="Energy Usage (kWh)",
-        template="plotly_white",
-        legend=dict(bgcolor="white", bordercolor="#d9d9d9", borderwidth=1),
-        height=400
+        yaxis_title="Energy Used (kWh)",
+        template="plotly_white"
     )
     return fig
 
