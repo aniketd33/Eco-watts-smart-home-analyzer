@@ -147,6 +147,5 @@ elif page == "ℹ️ About":
 
     **Developed by:** *Aniket Dombale*  
     **University:** Savitribai Phule Pune University  
-    **Department:** Data Science (Department of Technology)
     """)
 
