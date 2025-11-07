@@ -31,7 +31,7 @@ with open("style.css") as f:
 # 🧭 SIDEBAR NAVIGATION
 # ---------------------------------------------------------
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/4814/4814268.png", width=100)
-st.sidebar.title("⚡ EcoWatts Dashboard")
+st.sidebar.title("⚡EcoWatts Dashboard")
 page = st.sidebar.radio(
     "Navigate to:",
     ["🏠 Overview", "📊 Insights", "🔮 Forecasting", "ℹ️ About"]
