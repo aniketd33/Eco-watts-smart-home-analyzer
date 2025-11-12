@@ -7,8 +7,8 @@ from charts import (
     plot_daily_cost_trend,
     plot_room_wise_usage,
 )
-import model  # ML forecast model
-from fpdf import FPDF  # For PDF generation
+import model
+from fpdf import FPDF
 import tempfile
 
 # ------------------------------------------------
@@ -57,7 +57,6 @@ uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"], key="main_up
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
 
-    # Convert timestamp column if exists
     if "Timestamp" in df.columns:
         df["Timestamp"] = pd.to_datetime(df["Timestamp"])
     df.columns = [c.strip().replace(" ", "_") for c in df.columns]
@@ -72,14 +71,14 @@ if uploaded_file:
     # Appliance Filter
     if "Appliance" in df.columns:
         appliances = df["Appliance"].unique().tolist()
-        selected_appliances = st.sidebar.multiselect("🔌 Select Appliance(s)", options=appliances, default=appliances)
+        selected_appliances = st.sidebar.multiselect("🔌 Select Appliance(s)", options=appliances)
     else:
         selected_appliances = []
 
     # Room Filter
     if "Room" in df.columns:
         rooms = df["Room"].unique().tolist()
-        selected_rooms = st.sidebar.multiselect("🏠 Select Room(s)", options=rooms, default=rooms)
+        selected_rooms = st.sidebar.multiselect("🏠 Select Room(s)", options=rooms)
     else:
         selected_rooms = []
 
@@ -120,6 +119,10 @@ if uploaded_file:
             (filtered_df["Timestamp"].dt.date <= end_date)
         ]
 
+    if filtered_df.empty:
+        st.warning("⚠️ No data available. Please adjust filters or upload a valid dataset.")
+        st.stop()
+
     st.success(f"✅ Showing {len(filtered_df)} records after applying filters.")
     st.dataframe(filtered_df.head())
 
@@ -134,26 +137,30 @@ if uploaded_file:
     with col2:
         st.pyplot(plot_daily_cost_trend(filtered_df))
 
+    # Room-wise Chart
     st.subheader("🏠 Room-wise Energy Usage")
-    try:
+    if not filtered_df.empty and "Room" in filtered_df.columns:
         st.pyplot(plot_room_wise_usage(filtered_df))
-    except Exception as e:
-        st.warning(f"⚠️ Unable to load Room-wise chart: {e}")
+    else:
+        st.warning("⚠️ No data available for Room-wise chart. Please select filters or upload valid data.")
 
     # ------------------------------------------------
     # 🔮 Forecast Section
     # ------------------------------------------------
     st.markdown("---")
     st.header("🔮 Energy Usage Forecast")
-    try:
-        daily_data = model.prepare_forecast_data(filtered_df)
-        trained_model, mae, r2 = model.train_forecast_model(daily_data)
-        forecast_df = model.forecast_next_days(trained_model, daily_data)
-        fig_forecast = model.plot_forecast_results(daily_data, forecast_df)
-        st.plotly_chart(fig_forecast, use_container_width=True)
-        st.success(f"✅ Model Performance: MAE = {mae:.2f}, R² = {r2:.2f}")
-    except Exception as e:
-        st.warning(f"⚠️ Forecasting unavailable: {e}")
+    if not filtered_df.empty:
+        try:
+            daily_data = model.prepare_forecast_data(filtered_df)
+            trained_model, mae, r2 = model.train_forecast_model(daily_data)
+            forecast_df = model.forecast_next_days(trained_model, daily_data)
+            fig_forecast = model.plot_forecast_results(daily_data, forecast_df)
+            st.plotly_chart(fig_forecast, use_container_width=True)
+            st.success(f"✅ Model Performance: MAE = {mae:.2f}, R² = {r2:.2f}")
+        except Exception as e:
+            st.warning(f"⚠️ Forecasting unavailable: {e}")
+    else:
+        st.warning("⚠️ No data available for forecasting.")
 
     # ------------------------------------------------
     # 🌱 Sustainability (CO₂ Tracking, Alerts, Tips)
@@ -171,7 +178,6 @@ if uploaded_file:
         col2.metric("💰 Total Cost (INR)", f"{filtered_df['Cost(INR)'].sum():.2f}")
         col3.metric("♻️ Total Carbon Emission (kg CO₂)", f"{total_co2:.2f}")
 
-        # Alerts
         daily_usage = filtered_df.groupby(filtered_df['Timestamp'].dt.date)['Usage_kWh'].sum()
         if len(daily_usage) > 0:
             mean_usage = daily_usage.mean()
@@ -181,21 +187,18 @@ if uploaded_file:
             else:
                 st.success("✅ Energy usage is normal.")
 
-        # Eco Tips
         st.markdown("### 💡 Eco-Friendly Tips")
-        if "Appliance" in filtered_df.columns:
-            high_usage_appliance = filtered_df.groupby('Appliance')['Usage_kWh'].sum().idxmax()
-            eco_tips = [
-                f"Switch off your {high_usage_appliance} when not in use.",
-                "Use LED bulbs instead of incandescent lights.",
-                "Run washing machines and dishwashers in full loads.",
-                "Maintain your air conditioner filters for better efficiency.",
-                "Unplug idle devices to prevent phantom energy consumption."
-            ]
-            tip = random.choice(eco_tips)
-            st.info(f"💚 Tip: {tip}")
+        high_usage_appliance = filtered_df.groupby('Appliance')['Usage_kWh'].sum().idxmax()
+        eco_tips = [
+            f"Switch off your {high_usage_appliance} when not in use.",
+            "Use LED bulbs instead of incandescent lights.",
+            "Run washing machines and dishwashers in full loads.",
+            "Maintain your air conditioner filters for better efficiency.",
+            "Unplug idle devices to prevent phantom energy consumption."
+        ]
+        tip = random.choice(eco_tips)
+        st.info(f"💚 Tip: {tip}")
 
-        # Carbon Chart
         fig, ax = plt.subplots(figsize=(4, 3))
         filtered_df.groupby('Appliance')['Carbon_Footprint_kg'].sum().plot(kind='bar', color='#6a994e', ax=ax)
         ax.set_title("Appliance-wise Carbon Footprint")
@@ -209,7 +212,6 @@ if uploaded_file:
     st.header("💾 Download Filtered Report")
 
     csv = filtered_df.to_csv(index=False).encode("utf-8")
-
     st.download_button(
         label="⬇️ Download Filtered Data as CSV",
         data=csv,
@@ -228,16 +230,13 @@ if uploaded_file:
         pdf.add_page()
         pdf.set_font("Arial", "B", 16)
         pdf.cell(200, 10, txt="EcoWatts – Smart Home Energy Analyzer", ln=True, align="C")
-
         pdf.set_font("Arial", "", 12)
-        pdf.cell(200, 10, txt=f"Developed by: Aniket Dombale", ln=True, align="C")
+        pdf.cell(200, 10, txt="Developed by: Aniket Dombale", ln=True, align="C")
         pdf.ln(10)
 
-        pdf.multi_cell(0, 10, f"📅 Filter Range: {selected_dates[0]} to {selected_dates[1]}")
         pdf.multi_cell(0, 10, f"🏠 Rooms: {', '.join(selected_rooms) if selected_rooms else 'All'}")
         pdf.multi_cell(0, 10, f"🔌 Appliances: {', '.join(selected_appliances) if selected_appliances else 'All'}")
-        pdf.ln(10)
-
+        pdf.ln(5)
         pdf.cell(200, 10, txt=f"🌍 Total Energy Used: {filtered_df['Usage_kWh'].sum():.2f} kWh", ln=True)
         pdf.cell(200, 10, txt=f"💰 Total Cost: {filtered_df['Cost(INR)'].sum():.2f} INR", ln=True)
         pdf.cell(200, 10, txt=f"♻️ Total CO₂ Emission: {filtered_df['Carbon_Footprint_kg'].sum():.2f} kg", ln=True)
@@ -245,7 +244,6 @@ if uploaded_file:
 
         pdf.multi_cell(0, 10, f"💡 Eco Tip: {tip}")
         pdf.ln(20)
-
         pdf.cell(200, 10, txt="© 2025 EcoWatts Project – Developed by Aniket Dombale", ln=True, align="C")
 
         temp_pdf = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
@@ -258,7 +256,6 @@ if uploaded_file:
                 file_name="EcoWatts_Report.pdf",
                 mime="application/pdf"
             )
-
         st.success("✅ PDF Report generated successfully!")
 
 else:
