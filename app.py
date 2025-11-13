@@ -15,18 +15,21 @@ import model
 # ------------------------------------------------
 # PAGE CONFIG
 # ------------------------------------------------
-st.set_page_config(page_title="EcoWatts – Smart Home Energy Analyzer", page_icon="⚡", layout="wide")
+st.set_page_config(
+    page_title="EcoWatts – Smart Home Energy Analyzer",
+    page_icon="⚡",
+    layout="wide"
+)
 
 
 # ------------------------------------------------
-# TOP MAIN TITLE (Project Title Only)
+# TOP MAIN TITLE (Only Project Title)
 # ------------------------------------------------
 st.markdown(
     """
-    <h1 style='text-align:center; color:#2b6777; font-size:40px; margin-bottom:5px;'>
+    <h1 style='text-align:center; color:#2b6777; font-size:40px; margin-bottom:10px;'>
         📊 EcoWatts – Smart Home Energy Analyzer
     </h1>
-    <br>
     """,
     unsafe_allow_html=True
 )
@@ -92,6 +95,7 @@ if uploaded_file is not None:
 # PAGE: DASHBOARD
 # ------------------------------------------------
 if page == "Dashboard":
+
     st.subheader("📈 Visual Analytics")
 
     col1, col2 = st.columns(2)
@@ -117,14 +121,14 @@ if page == "Dashboard":
     with col4:
         st.info("📌 Add more visuals here if needed.")
 
-    # -------------------------------------
-    # Developer Credit (BOTTOM OF DASHBOARD)
-    # -------------------------------------
+    # -------------------------------------------------------------
+    # ⭐ FINAL DEVELOPER CREDIT (100% Visible — Bottom)
+    # -------------------------------------------------------------
+    st.markdown("---")
     st.markdown(
         """
-        <br><hr>
-        <p style='text-align:center; color:#1f4e5f; font-size:18px;'>
-            Developed by: <b>Aniket Dombale</b>
+        <p style='text-align:center; color:#1f4e5f; font-size:20px; margin-top:15px;'>
+            <b>Developed by: Aniket Dombale</b>
         </p>
         """,
         unsafe_allow_html=True
@@ -212,7 +216,7 @@ elif page == "Filters":
 
 
 # ------------------------------------------------
-# FOOTER
+# FOOTER (General Footer)
 # ------------------------------------------------
 st.markdown("---")
 st.caption("© 2025 EcoWatts Project")
