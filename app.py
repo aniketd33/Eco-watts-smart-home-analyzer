@@ -23,7 +23,7 @@ st.set_page_config(
 
 
 # ------------------------------------------------
-# TOP MAIN TITLE (Only Project Title)
+# TOP MAIN TITLE
 # ------------------------------------------------
 st.markdown(
     """
@@ -66,6 +66,19 @@ page = st.sidebar.radio(
     ["Dashboard", "Forecast", "Sustainability", "Filters"]
 )
 
+# ------------------------------------------------
+# SIDEBAR AUTHOR FOOTER
+# ------------------------------------------------
+st.sidebar.markdown("<hr>", unsafe_allow_html=True)
+st.sidebar.markdown(
+    """
+    <p style='text-align:center; color:#e0e0e0; font-size:16px; margin-top:20px;'>
+        <b>Developed by:<br> Aniket Dombale</b>
+    </p>
+    """,
+    unsafe_allow_html=True
+)
+
 
 # ------------------------------------------------
 # LOAD DATA (AUTO + OPTIONAL UPLOAD)
@@ -92,7 +105,7 @@ if uploaded_file is not None:
 
 
 # ------------------------------------------------
-# PAGE: DASHBOARD (Updated with Summary + Table + Author)
+# PAGE: DASHBOARD
 # ------------------------------------------------
 if page == "Dashboard":
 
@@ -115,7 +128,7 @@ if page == "Dashboard":
     st.markdown("---")
 
     # -------------------------
-    # TABLE PREVIEW (first 10 rows)
+    # TABLE PREVIEW
     # -------------------------
     st.subheader("📋 Data Preview (first 10 rows)")
     st.dataframe(df.head(10), use_container_width=True)
@@ -123,7 +136,7 @@ if page == "Dashboard":
     st.markdown("---")
 
     # -------------------------
-    # VISUAL CHARTS (same layout)
+    # VISUAL ANALYTICS
     # -------------------------
     st.subheader("📈 Visual Analytics")
 
@@ -149,19 +162,6 @@ if page == "Dashboard":
 
     with col4:
         st.info("📌 Add more visuals here if needed.")
-
-    # -------------------------
-    # AUTHOR CREDIT (ONLY DASHBOARD)
-    # -------------------------
-    st.markdown("---")
-    st.markdown(
-        """
-        <p style='text-align:center; color:#1f4e5f; font-size:20px; margin-top:8px;'>
-            <b>Developed by: Aniket Dombale</b>
-        </p>
-        """,
-        unsafe_allow_html=True
-    )
 
 
 # ------------------------------------------------
@@ -245,7 +245,7 @@ elif page == "Filters":
 
 
 # ------------------------------------------------
-# FOOTER (General Footer)
+# FOOTER
 # ------------------------------------------------
 st.markdown("---")
 st.caption("© 2025 EcoWatts Project")
