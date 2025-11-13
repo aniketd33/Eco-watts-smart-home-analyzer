@@ -1,151 +1,196 @@
 import streamlit as st
 import pandas as pd
-import sys, os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+import random
+import matplotlib.pyplot as plt
 
+# Import functions from charts.py and model.py
 from charts import (
     plot_usage_by_appliance,
     plot_daily_cost_trend,
-    plot_room_wise_usage,
-    plot_peak_usage_timeline,
+    plot_room_wise_usage
 )
 import model
 
-# ---------------------------------------------------------
-# 🌿 PAGE CONFIG
-# ---------------------------------------------------------
-st.set_page_config(
-    page_title="EcoWatts Smart Home Energy Analyzer",
-    page_icon="⚡",
-    layout="wide",
-    initial_sidebar_state="expanded"
+
+# ------------------------------------------------
+# PAGE CONFIG
+# ------------------------------------------------
+st.set_page_config(page_title="EcoWatts – Smart Home Energy Analyzer", page_icon="⚡", layout="wide")
+
+
+# ------------------------------------------------
+# LOAD CUSTOM CSS
+# ------------------------------------------------
+try:
+    with open("style.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+except FileNotFoundError:
+    st.warning("⚠ style.css not found. Using default theme.")
+
+
+# ------------------------------------------------
+# SIDEBAR TITLE (ALWAYS VISIBLE)
+# ------------------------------------------------
+st.sidebar.markdown(
+    """
+    <h2 style='color:white; text-align:center; font-size:25px;'>
+        ⚡ EcoWatts Dashboard
+    </h2>
+    """,
+    unsafe_allow_html=True
 )
 
-# ---------------------------------------------------------
-# 🌈 CUSTOM STYLING (CSS)
-# ---------------------------------------------------------
-with open("style.css") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# ---------------------------------------------------------
-# 🧭 SIDEBAR NAVIGATION
-# ---------------------------------------------------------
-st.sidebar.image("https://cdn-icons-png.flaticon.com/512/4814/4814268.png", width=100)
-st.sidebar.title("⚡EcoWatts Dashboard")
+# ------------------------------------------------
+# SIDEBAR NAVIGATION
+# ------------------------------------------------
 page = st.sidebar.radio(
-    "Navigate to:",
-    ["🏠 Overview", "📊 Insights", "🔮 Forecasting", "ℹ️ About"]
+    "Navigation Menu",
+    ["Dashboard", "Forecast", "Sustainability", "Filters"]
 )
-st.sidebar.markdown("---")
-st.sidebar.markdown("**👨‍💻 Author:** Aniket Dombale\n© 2025 | Open Source Project")
 
-# ---------------------------------------------------------
-# 🏠 PAGE 1: OVERVIEW
-# ---------------------------------------------------------
-if page == "🏠 Overview":
-    st.title("⚡ EcoWatts Smart Home Energy Analyzer")
-    st.markdown("""
-    Welcome to the **EcoWatts Dashboard** — your intelligent home energy analyzer.  
-    Upload your dataset to visualize appliance usage, daily costs, and forecast energy needs.
-    """)
 
-    uploaded_file = st.file_uploader("📤 Upload your energy usage CSV file", type=["csv"])
+# ------------------------------------------------
+# LOAD DATA (AUTO + OPTIONAL UPLOAD)
+# ------------------------------------------------
+DEFAULT_PATH = "energy_usage_Dataset.csv"
 
-    if uploaded_file:
-        df = pd.read_csv(uploaded_file)
+try:
+    df = pd.read_csv(DEFAULT_PATH)
+    df["Timestamp"] = pd.to_datetime(df["Timestamp"])
+    df.columns = [c.strip().replace(" ", "_") for c in df.columns]
+    st.info("📊 Demo dataset loaded automatically.")
+except Exception:
+    st.error("⚠ Could not load demo dataset.")
+    df = pd.DataFrame()
 
-        # Convert Timestamp column
-        if 'Timestamp' in df.columns:
-            df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+uploaded_file = st.file_uploader("📤 Upload your dataset (optional)", type=["csv"])
 
-        st.success("✅ Data uploaded successfully!")
-        st.dataframe(df.head())
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+    if "Timestamp" in df.columns:
+        df["Timestamp"] = pd.to_datetime(df["Timestamp"])
+    df.columns = [c.strip().replace(" ", "_") for c in df.columns]
+    st.success("✅ Custom Dataset Loaded!")
 
-        st.markdown("### 📈 Quick Metrics")
-        total_usage = df['Usage_kWh'].sum()
-        total_cost = df['Cost(INR)'].sum()
-        avg_temp = df['Temp(C)'].mean()
 
-        c1, c2, c3 = st.columns(3)
-        c1.metric("🔋 Total Usage (kWh)", f"{total_usage:.2f}")
-        c2.metric("💰 Total Cost (₹)", f"{total_cost:.2f}")
-        c3.metric("🌡️ Avg Temperature (°C)", f"{avg_temp:.1f}")
+# ------------------------------------------------
+# PAGE: DASHBOARD
+# ------------------------------------------------
+if page == "Dashboard":
+    st.title("📊 EcoWatts – Smart Home Energy Analyzer")
 
-# ---------------------------------------------------------
-# 📊 PAGE 2: VISUAL INSIGHTS
-# ---------------------------------------------------------
-elif page == "📊 Insights":
-    st.title("📊 Visual Insights Dashboard")
+    st.subheader("🔍 Data Preview")
+    st.dataframe(df.head())
 
-    uploaded_file = st.file_uploader("📤 Upload your energy usage CSV file", type=["csv"])
+    st.markdown("### 📈 Visual Analytics")
 
-    if uploaded_file:
-        df = pd.read_csv(uploaded_file)
-        if 'Timestamp' in df.columns:
-            df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+    col1, col2 = st.columns(2)
 
-        col1, col2 = st.columns(2)
-        with col1:
-            fig1 = plot_usage_by_appliance(df)
-            st.pyplot(fig1)
-        with col2:
-            fig2 = plot_daily_cost_trend(df)
-            st.pyplot(fig2)
+    with col1:
+        fig1 = plot_usage_by_appliance(df)
+        fig1.set_size_inches(6, 4)
+        st.pyplot(fig1)
 
-        st.markdown("---")
-        st.subheader("🏠 Room-wise Energy Usage")
+    with col2:
+        fig2 = plot_daily_cost_trend(df)
+        fig2.set_size_inches(6, 4)
+        st.pyplot(fig2)
+
+    col3, col4 = st.columns(2)
+
+    with col3:
+        st.subheader("🏠 Room-wise Usage")
         fig3 = plot_room_wise_usage(df)
+        fig3.set_size_inches(6, 4)
         st.pyplot(fig3)
 
-        st.markdown("---")
-        st.subheader("⏰ Peak Usage Timeline")
-        fig4 = plot_peak_usage_timeline(df)
-        st.pyplot(fig4)
+    with col4:
+        st.info("📌 Add more visuals in this area if needed.")
 
+
+# ------------------------------------------------
+# PAGE: FORECAST
+# ------------------------------------------------
+elif page == "Forecast":
+    st.title("🔮 Energy Usage Prediction")
+
+    try:
+        daily_data = model.prepare_forecast_data(df)
+        trained_model, mae, r2 = model.train_forecast_model(daily_data)
+        forecast_df = model.forecast_next_days(trained_model, daily_data)
+        fig_forecast = model.plot_forecast_results(daily_data, forecast_df)
+
+        st.plotly_chart(fig_forecast, use_container_width=True)
+
+        st.success(f"📌 MAE: {mae:.2f} | R² Score: {r2:.2f}")
+
+    except Exception as e:
+        st.error(f"⚠ Forecasting Error: {e}")
+
+
+# ------------------------------------------------
+# PAGE: SUSTAINABILITY
+# ------------------------------------------------
+elif page == "Sustainability":
+    st.title("🌱 Sustainability Insights")
+
+    CO2_FACTOR = 0.85
+    df["Carbon"] = df["Usage_kWh"] * CO2_FACTOR
+
+    colA, colB, colC = st.columns(3)
+    colA.metric("⚡ Total Energy (kWh)", f"{df['Usage_kWh'].sum():.2f}")
+    colB.metric("💰 Total Cost (INR)", f"{df['Cost(INR)'].sum():.2f}")
+    colC.metric("🌍 Carbon Emission (kg CO₂)", f"{df['Carbon'].sum():.2f}")
+
+    st.subheader("⚠ Smart Alert System")
+    daily_usage = df.groupby(df["Timestamp"].dt.date)["Usage_kWh"].sum()
+    if daily_usage.iloc[-1] > 1.5 * daily_usage.mean():
+        st.warning("⚡ High Usage Detected Today!")
     else:
-        st.warning("👆 Please upload a CSV file to view insights.")
+        st.success("✅ Energy Levels Normal")
 
-# ---------------------------------------------------------
-# 🔮 PAGE 3: FORECASTING
-# ---------------------------------------------------------
-elif page == "🔮 Forecasting":
-    st.title("🔮 Energy Usage Forecasting")
+    st.subheader("💡 Eco-Friendly Tips")
+    tips = [
+        "Use LED bulbs instead of traditional bulbs.",
+        "Turn off appliances when not in use.",
+        "Clean AC filters regularly for better efficiency.",
+        "Use natural ventilation during mornings.",
+    ]
+    st.info(random.choice(tips))
 
-    uploaded_file = st.file_uploader("📤 Upload your dataset for forecasting", type=["csv"])
-    if uploaded_file:
-        df = pd.read_csv(uploaded_file)
-        if 'Timestamp' in df.columns:
-            df['Timestamp'] = pd.to_datetime(df['Timestamp'])
 
-        try:
-            daily_data = model.prepare_forecast_data(df)
-            trained_model, mae, r2 = model.train_forecast_model(daily_data)
-            forecast_df = model.forecast_next_days(trained_model, daily_data)
-            fig_forecast = model.plot_forecast_results(daily_data, forecast_df)
+# ------------------------------------------------
+# PAGE: FILTERS
+# ------------------------------------------------
+elif page == "Filters":
+    st.title("🔍 Filter Energy Data")
 
-            st.plotly_chart(fig_forecast, use_container_width=True)
-            st.success(f"✅ Model Performance: MAE = {mae:.2f}, R² = {r2:.2f}")
-        except Exception as e:
-            st.warning(f"⚠️ Forecasting unavailable: {e}")
-    else:
-        st.info("📥 Upload a dataset to generate forecasts.")
+    rooms = st.multiselect("Select Room(s)", options=df["Room"].unique())
+    appliances = st.multiselect("Select Appliance(s)", options=df["Appliance"].unique())
+    date_range = st.date_input("Select Date Range", [])
 
-# ---------------------------------------------------------
-# ℹ️ PAGE 4: ABOUT
-# ---------------------------------------------------------
-elif page == "ℹ️ About":
-    st.title("ℹ️ About EcoWatts Dashboard")
-    st.markdown("""
-    **EcoWatts** is a Streamlit-powered intelligent dashboard that visualizes and predicts
-    household energy usage using **machine learning** and **data visualization**.
+    df_filtered = df.copy()
 
-    **Key Features:**
-    - Appliance-wise energy breakdown  
-    - Daily cost trend visualization  
-    - Room-wise power analytics  
-    - ML-based forecasting of upcoming energy demand  
+    if rooms:
+        df_filtered = df_filtered[df_filtered["Room"].isin(rooms)]
+    if appliances:
+        df_filtered = df_filtered[df_filtered["Appliance"].isin(appliances)]
+    if len(date_range) == 2:
+        start, end = date_range
+        df_filtered = df_filtered[
+            (df_filtered["Timestamp"].dt.date >= start) &
+            (df_filtered["Timestamp"].dt.date <= end)
+        ]
 
-    **Developed by:** *Aniket Dombale*  
-    **University:** Savitribai Phule Pune University  
-    """)
+    st.dataframe(df_filtered)
 
+    if st.button("Reset Filters"):
+        st.experimental_rerun()
+
+
+# ------------------------------------------------
+# FOOTER
+# ------------------------------------------------
+st.markdown("---")
+st.caption("Developed by **Aniket Dombale** | © 2025 EcoWatts Project")
