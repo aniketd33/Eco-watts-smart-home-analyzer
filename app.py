@@ -92,10 +92,39 @@ if uploaded_file is not None:
 
 
 # ------------------------------------------------
-# PAGE: DASHBOARD
+# PAGE: DASHBOARD (Updated with Summary + Table + Author)
 # ------------------------------------------------
 if page == "Dashboard":
 
+    st.header("📊 Dashboard Overview")
+
+    # -------------------------
+    # SUMMARY METRICS
+    # -------------------------
+    total_energy = df["Usage_kWh"].sum()
+    total_cost = df["Cost(INR)"].sum()
+    total_rooms = df["Room"].nunique()
+    total_appliances = df["Appliance"].nunique()
+
+    s1, s2, s3, s4 = st.columns(4)
+    s1.metric("⚡ Total Energy (kWh)", f"{total_energy:.2f}")
+    s2.metric("💰 Total Cost (INR)", f"{total_cost:.2f}")
+    s3.metric("🏠 Rooms", total_rooms)
+    s4.metric("🔌 Appliances", total_appliances)
+
+    st.markdown("---")
+
+    # -------------------------
+    # TABLE PREVIEW (first 10 rows)
+    # -------------------------
+    st.subheader("📋 Data Preview (first 10 rows)")
+    st.dataframe(df.head(10), use_container_width=True)
+
+    st.markdown("---")
+
+    # -------------------------
+    # VISUAL CHARTS (same layout)
+    # -------------------------
     st.subheader("📈 Visual Analytics")
 
     col1, col2 = st.columns(2)
@@ -121,13 +150,13 @@ if page == "Dashboard":
     with col4:
         st.info("📌 Add more visuals here if needed.")
 
-    # -------------------------------------------------------------
-    # ⭐ FINAL DEVELOPER CREDIT (100% Visible — Bottom)
-    # -------------------------------------------------------------
+    # -------------------------
+    # AUTHOR CREDIT (ONLY DASHBOARD)
+    # -------------------------
     st.markdown("---")
     st.markdown(
         """
-        <p style='text-align:center; color:#1f4e5f; font-size:20px; margin-top:15px;'>
+        <p style='text-align:center; color:#1f4e5f; font-size:20px; margin-top:8px;'>
             <b>Developed by: Aniket Dombale</b>
         </p>
         """,
