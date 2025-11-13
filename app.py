@@ -19,6 +19,20 @@ st.set_page_config(page_title="EcoWatts – Smart Home Energy Analyzer", page_ic
 
 
 # ------------------------------------------------
+# TOP MAIN TITLE (Project Title Only)
+# ------------------------------------------------
+st.markdown(
+    """
+    <h1 style='text-align:center; color:#2b6777; font-size:40px; margin-bottom:5px;'>
+        📊 EcoWatts – Smart Home Energy Analyzer
+    </h1>
+    <br>
+    """,
+    unsafe_allow_html=True
+)
+
+
+# ------------------------------------------------
 # LOAD CUSTOM CSS
 # ------------------------------------------------
 try:
@@ -29,7 +43,7 @@ except FileNotFoundError:
 
 
 # ------------------------------------------------
-# SIDEBAR TITLE (ALWAYS VISIBLE)
+# SIDEBAR TITLE
 # ------------------------------------------------
 st.sidebar.markdown(
     """
@@ -78,12 +92,7 @@ if uploaded_file is not None:
 # PAGE: DASHBOARD
 # ------------------------------------------------
 if page == "Dashboard":
-    st.title("📊 EcoWatts – Smart Home Energy Analyzer")
-
-    st.subheader("🔍 Data Preview")
-    st.dataframe(df.head())
-
-    st.markdown("### 📈 Visual Analytics")
+    st.subheader("📈 Visual Analytics")
 
     col1, col2 = st.columns(2)
 
@@ -106,7 +115,20 @@ if page == "Dashboard":
         st.pyplot(fig3)
 
     with col4:
-        st.info("📌 Add more visuals in this area if needed.")
+        st.info("📌 Add more visuals here if needed.")
+
+    # -------------------------------------
+    # Developer Credit (BOTTOM OF DASHBOARD)
+    # -------------------------------------
+    st.markdown(
+        """
+        <br><hr>
+        <p style='text-align:center; color:#1f4e5f; font-size:18px;'>
+            Developed by: <b>Aniket Dombale</b>
+        </p>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 # ------------------------------------------------
@@ -122,7 +144,6 @@ elif page == "Forecast":
         fig_forecast = model.plot_forecast_results(daily_data, forecast_df)
 
         st.plotly_chart(fig_forecast, use_container_width=True)
-
         st.success(f"📌 MAE: {mae:.2f} | R² Score: {r2:.2f}")
 
     except Exception as e:
@@ -145,6 +166,7 @@ elif page == "Sustainability":
 
     st.subheader("⚠ Smart Alert System")
     daily_usage = df.groupby(df["Timestamp"].dt.date)["Usage_kWh"].sum()
+
     if daily_usage.iloc[-1] > 1.5 * daily_usage.mean():
         st.warning("⚡ High Usage Detected Today!")
     else:
@@ -193,4 +215,4 @@ elif page == "Filters":
 # FOOTER
 # ------------------------------------------------
 st.markdown("---")
-st.caption("Developed by **Aniket Dombale** | © 2025 EcoWatts Project")
+st.caption("© 2025 EcoWatts Project")
