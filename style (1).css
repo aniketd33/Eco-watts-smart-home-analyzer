@@ -1,0 +1,95 @@
+/* 🌿 EcoWatts Dashboard – Modern Green-Blue Theme */
+
+/* ---------- Overall Page ---------- */
+body {
+    background-color: #f5f7fa;
+    color: #1c1c1c;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ---------- Sidebar ---------- */
+[data-testid="stSidebar"] {
+    background-color: #2b6777;
+    color: white;
+    border-right: 3px solid #52ab98;
+}
+
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] label {
+    color: #eaf4f4;
+}
+
+/* ---------- Title & Headers ---------- */
+h1, h2, h3 {
+    color: #2b6777 !important;
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 2rem;
+    border-bottom: 3px solid #52ab98;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
+
+/* ---------- Cards / Containers ---------- */
+.block-container {
+    background-color: #ffffff;
+    padding: 20px 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- Buttons ---------- */
+.stButton>button {
+    background-color: #52ab98;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    padding: 8px 16px;
+    transition: 0.3s;
+}
+
+.stButton>button:hover {
+    background-color: #3a8f7d;
+    transform: scale(1.03);
+}
+
+/* ---------- Info & Warning Boxes ---------- */
+.stAlert {
+    border-radius: 10px;
+    border-left: 6px solid #52ab98;
+    background-color: #eaf4f4 !important;
+}
+
+/* ---------- Tables ---------- */
+table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+thead {
+    background-color: #52ab98;
+    color: white;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+/* ---------- Charts ---------- */
+canvas, .plotly {
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    padding: 10px;
+}
+
+/* ---------- Footer ---------- */
+footer {
+    text-align: center;
+    color: #777;
+    margin-top: 30px;
+}
