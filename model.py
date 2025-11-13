@@ -1,42 +1,72 @@
 import pandas as pd
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error, r2_score
 import plotly.graph_objects as go
+from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.linear_model import LinearRegression
+import numpy as np
 
+
+# -------------------------------------------
+# Prepare Forecast Data
+# -------------------------------------------
 def prepare_forecast_data(df):
-    df['Date'] = df['Timestamp'].dt.date
-    daily_data = df.groupby('Date')['Usage_kWh'].sum().reset_index()
-    daily_data['Day'] = range(len(daily_data))
-    return daily_data
+    df_daily = df.groupby(df["Timestamp"].dt.date)["Usage_kWh"].sum().reset_index()
+    df_daily.columns = ["date", "usage"]
+    df_daily["day_num"] = np.arange(len(df_daily))
+    return df_daily
 
-def train_forecast_model(daily_data):
-    X = daily_data[['Day']]
-    y = daily_data['Usage_kWh']
+
+# -------------------------------------------
+# Train Model
+# -------------------------------------------
+def train_forecast_model(df_daily):
+    X = df_daily[["day_num"]]
+    y = df_daily["usage"]
+
     model = LinearRegression()
     model.fit(X, y)
-    y_pred = model.predict(X)
-    mae = mean_absolute_error(y, y_pred)
-    r2 = r2_score(y, y_pred)
+
+    preds = model.predict(X)
+    mae = mean_absolute_error(y, preds)
+    r2 = r2_score(y, preds)
+
     return model, mae, r2
 
-def forecast_next_days(model, daily_data, n_days=7):
-    future_days = pd.DataFrame({'Day': range(len(daily_data), len(daily_data) + n_days)})
-    future_pred = model.predict(future_days)
+
+# -------------------------------------------
+# Forecast Next Days
+# -------------------------------------------
+def forecast_next_days(model, df_daily, days=7):
+    last_day = df_daily["day_num"].max()
+    future_days = np.arange(last_day + 1, last_day + days + 1)
+
+    predicted = model.predict(future_days.reshape(-1, 1))
     forecast_df = pd.DataFrame({
-        'Date': pd.date_range(daily_data['Date'].iloc[-1], periods=n_days + 1, freq='D')[1:],
-        'Predicted_Usage': future_pred
+        "date": pd.date_range(start=df_daily["date"].iloc[-1], periods=days+1)[1:],
+        "predicted_usage": predicted
     })
     return forecast_df
 
-def plot_forecast_results(daily_data, forecast_df):
+
+# -------------------------------------------
+# Plot Forecast Results
+# -------------------------------------------
+def plot_forecast_results(df_daily, forecast_df):
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=daily_data['Date'], y=daily_data['Usage_kWh'],
-                             mode='lines+markers', name='Actual Usage', line=dict(color='green')))
-    fig.add_trace(go.Scatter(x=forecast_df['Date'], y=forecast_df['Predicted_Usage'],
-                             mode='lines+markers', name='Forecast', line=dict(color='orange', dash='dash')))
-    fig.update_layout(title="Energy Usage Forecast (Next 7 Days)",
-                      xaxis_title="Date", yaxis_title="Usage (kWh)",
-                      template="plotly_white")
+
+    fig.add_trace(go.Scatter(
+        x=df_daily["date"], y=df_daily["usage"],
+        mode="lines+markers", name="Actual Usage"
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=forecast_df["date"], y=forecast_df["predicted_usage"],
+        mode="lines+markers", name="Forecasted Usage"
+    ))
+
+    fig.update_layout(
+        title="Energy Usage Forecast",
+        xaxis_title="Date",
+        yaxis_title="Usage (kWh)",
+        template="plotly_white"
+    )
     return fig
-
-
