@@ -66,18 +66,23 @@ page = st.sidebar.radio(
     ["Dashboard", "Forecast", "Sustainability", "Filters"]
 )
 
+
 # ------------------------------------------------
-# SIDEBAR AUTHOR FOOTER
+# SIDEBAR BOTTOM AUTHOR (STICKY)
 # ------------------------------------------------
-st.sidebar.markdown("<hr>", unsafe_allow_html=True)
-st.sidebar.markdown(
-    """
-    <p style='text-align:center; color:#e0e0e0; font-size:16px; margin-top:20px;'>
-        <b>Developed by:<br> Aniket Dombale</b>
-    </p>
-    """,
-    unsafe_allow_html=True
-)
+st.sidebar.markdown("""
+    <div style="
+        position: fixed;
+        bottom: 12px;
+        left: 10px;
+        width: 270px;
+        text-align: center;
+        color: #e0e0e0;
+        font-size: 16px;
+    ">
+        <b>Author: Aniket Dombale</b>
+    </div>
+""", unsafe_allow_html=True)
 
 
 # ------------------------------------------------
