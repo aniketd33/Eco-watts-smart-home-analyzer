@@ -33,9 +33,9 @@ def train_forecast_model(df_daily):
 
 
 # -------------------------------------------
-# Forecast Next Days
+# Forecast Next Days (Updated to 20 days)
 # -------------------------------------------
-def forecast_next_days(model, df_daily, days=20):
+def forecast_next_days(model, df_daily, days=20):  # <-- UPDATED
     last_day = df_daily["day_num"].max()
     future_days = np.arange(last_day + 1, last_day + days + 1)
 
@@ -64,7 +64,7 @@ def plot_forecast_results(df_daily, forecast_df):
     ))
 
     fig.update_layout(
-        title="Energy Usage Forecast",
+        title="Energy Usage Forecast (Next 20 Days)",
         xaxis_title="Date",
         yaxis_title="Usage (kWh)",
         template="plotly_white"
