@@ -173,19 +173,27 @@ if page == "Dashboard":
 # PAGE: FORECAST
 # ------------------------------------------------
 elif page == "Forecast":
-    st.title("🔮 Energy Usage Prediction")
+    st.title("🔮 Energy Usage Prediction (Next 20 Days)")
 
     try:
         daily_data = model.prepare_forecast_data(df)
         trained_model, mae, r2 = model.train_forecast_model(daily_data)
-        forecast_df = model.forecast_next_days(trained_model, daily_data)
+
+        # 🔥 UPDATED → 20-day forecasting
+        forecast_df = model.forecast_next_days(trained_model, daily_data, days=20)
+
         fig_forecast = model.plot_forecast_results(daily_data, forecast_df)
 
         st.plotly_chart(fig_forecast, use_container_width=True)
         st.success(f"📌 MAE: {mae:.2f} | R² Score: {r2:.2f}")
 
+        # Show Forecast Table
+        st.subheader("📅 Forecasted Energy Usage (Next 20 Days)")
+        st.dataframe(forecast_df)
+
     except Exception as e:
         st.error(f"⚠ Forecasting Error: {e}")
+
 
 
 # ------------------------------------------------
