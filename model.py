@@ -35,7 +35,7 @@ def train_forecast_model(df_daily):
 # -------------------------------------------
 # Forecast Next Days
 # -------------------------------------------
-def forecast_next_days(model, df_daily, days=7):
+def forecast_next_days(model, df_daily, days=20):
     last_day = df_daily["day_num"].max()
     future_days = np.arange(last_day + 1, last_day + days + 1)
 
