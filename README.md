@@ -25,10 +25,10 @@ EcoWatts is a data-driven web application designed to monitor, analyze, and opti
 **Name:** Energy dataset.csv 
 
 **Description:**  
-Timestamp
-Household_ID
-Room
-Appliance
+Timestamp,
+Household_ID,
+Room,
+Appliance,
 Usage_KWh
 
 **Size: 43850 records  
