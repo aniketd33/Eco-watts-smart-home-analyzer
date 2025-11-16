@@ -22,19 +22,16 @@ EcoWatts is a data-driven web application designed to monitor, analyze, and opti
 ---
 
 ## 🧩 Dataset
-**Name:** energy_usage_Dataset.csv 
+**Name:** Energy dataset.csv 
 
 **Description:**  
-Contains timestamped appliance usage data with the following columns:
-- `Timestamp`
-- `Appliance`
-- `Usage_kWh`
-- `Room`
-- `Mode`
-- `Temperature (°C)`
-- `Cost (INR)`
+Timestamp
+Household_ID
+Room
+Appliance
+Usage_KWh
 
-**Size:**200 records  
+**Size: 43850 records  
 **Source:** Custom dataset or open-source (Kaggle / simulated IoT smart home dataset)
 
 ---
